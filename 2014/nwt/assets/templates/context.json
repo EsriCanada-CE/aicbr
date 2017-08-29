@@ -1,0 +1,242 @@
+{
+	"components": "assets/components",
+	"assets": "assets",
+	"author": "Cameron Plouffe",
+	"title": "AICBR Northwest Territories Programs Map",
+  "header": "NWT Programs",
+  "menu": {
+    "about": "About",
+    "types": "Program Types",
+    "filter": [
+      {
+        "label": "Healthy Eating",
+        "lower": "healthy-eating"
+      },
+      {
+        "label": "Active Living",
+        "lower": "active-living"
+      }
+    ],
+    "community": "Commmunity",
+    "community-filter": [
+      {
+        "label": "All",
+        "lower": "all"
+      },
+      {
+        "label": "Aklavik",
+        "lower": "aklavik"
+      },
+      {
+        "label": "Behchok\u00f6",
+        "lower": "behchokoe"
+      },
+      {
+        "label": "Colville Lake",
+        "lower": "colville-lake"
+      },
+      {
+        "label": "Deline",
+        "lower": "deline"
+      },
+      {
+        "label": "Detah",
+        "lower": "detah"
+      },
+      {
+        "label": "Enterprise",
+        "lower": "enterprise"
+      },
+      {
+        "label": "Fort Good Hope",
+        "lower": "fort-good-hope"
+      },
+      {
+        "label": "Fort Liard",
+        "lower": "fort-liard"
+      },
+      {
+        "label": "Fort McPherson",
+        "lower": "fort-mcpherson"
+      },
+      {
+        "label": "Fort Providence",
+        "lower": "fort-providence"
+      },
+      {
+        "label": "Fort Resolution",
+        "lower": "fort-resolution"
+      },
+      {
+        "label": "Fort Simpson",
+        "lower": "fort-simpson"
+      },
+      {
+        "label": "Fort Smith",
+        "lower": "fort-smith"
+      },
+      {
+        "label": "Gam\u00e8t\u00ec",
+        "lower": "gameti"
+      },
+      {
+        "label": "Hay River",
+        "lower": "hay-river"
+      },
+      {
+        "label": "Hay River Dene Reserve",
+        "lower": "hay-river-dene-reserve"
+      },
+      {
+        "label": "Inuvik",
+        "lower": "inuvik"
+      },
+      {
+        "label": "Jean Marie River",
+        "lower": "jean-marie-river"
+      },
+      {
+        "label": "Lutselk\u2019e",
+        "lower": "lutselk-e"
+      },
+      {
+        "label": "Ndilo",
+        "lower": "ndilo"
+      },
+      {
+        "label": "Norman Wells",
+        "lower": "norman-wells"
+      },
+      {
+        "label": "Paulatuk",
+        "lower": "paulatuk"
+      },
+      {
+        "label": "Sachs Harbour",
+        "lower": "sachs-harbour"
+      },
+      {
+        "label": "Trout Lake",
+        "lower": "trout-lake"
+      },
+      {
+        "label": "Tsiigehtchic",
+        "lower": "tsiigehtchic"
+      },
+      {
+        "label": "Tuktoyaktuk",
+        "lower": "tuktoyaktuk"
+      },
+      {
+        "label": "Tulita",
+        "lower": "tulita"
+      },
+      {
+        "label": "Ulukhaktok",
+        "lower": "ulukhaktok"
+      },
+      {
+        "label": "Wekwe\u00e8ti",
+        "lower": "wekweeti"
+      },
+      {
+        "label": "What\u00ec",
+        "lower": "whati"
+      },
+      {
+        "label": "Yellowknife",
+        "lower": "yellowknife"
+      }
+    ],
+    "target-group": "Target Group",
+    "target-group-filter": [
+      {
+        "label": "All",
+        "lower": "all"
+      },
+      {
+        "label": "Everyone",
+        "lower": "everyone"
+      },
+      {
+        "label": "Other",
+        "lower": "other"
+      },
+      {
+        "label": "Seniors/Elders",
+        "lower": "seniors"
+      },
+      {
+        "label": "Families",
+        "lower": "families"
+      },
+      {
+        "label": "Children (5-12)",
+        "lower": "children"
+      },
+      {
+        "label": "Youth (13-19)",
+        "lower": "youth"
+      },
+      {
+        "label": "Adults",
+        "lower": "adults"
+      },
+      {
+        "label": "Students",
+        "lower": "students"
+      },
+      {
+        "label": "Pre-school Children (1-4)",
+        "lower": "pre-school"
+      },
+      {
+        "label": "Women/Girls Only",
+        "lower": "women"
+      },
+      {
+        "label": "Men/Boys Only",
+        "lower": "men"
+      },
+      {
+        "label": "Pre/Post Natal",
+        "lower": "natal"
+      },
+      {
+        "label": "People living with low income",
+        "lower": "low-income"
+      },
+      {
+        "label": "People living with disabilities",
+        "lower": "disabilities"
+      }
+    ],
+    "source": "Source",
+    "source-filter": [
+      {
+        "label": "All",
+        "lower": "all"
+      },
+      {
+        "label": "blogTO",
+        "lower": "blogto"
+      },
+      {
+        "label": "InsideToronto",
+        "lower": "insidetoronto"
+      },
+      {
+        "label": "concertsTO",
+        "lower": "concertsto"
+      },
+      {
+        "label": "tiff",
+        "lower": "tiff"
+      },
+      {
+        "label": "Just Shows",
+        "lower": "justshows"
+      }
+    ]
+  }
+}

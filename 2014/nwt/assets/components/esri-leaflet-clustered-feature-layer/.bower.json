@@ -1,0 +1,26 @@
+{
+  "name": "esri-leaflet-clustered-feature-layer",
+  "version": "2.0.0-beta.1",
+  "main": "dist/esri-leaflet-clustered-feature-layer.js",
+  "dependencies": {
+    "esri-leaflet": "^2.0.0-beta.6",
+    "leaflet": "^1.0.0-beta.2",
+    "leaflet.markercluster": "git+https://github.com/Leaflet/Leaflet.markercluster.git#v1.0.0-beta.2.0"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "spec"
+  ],
+  "homepage": "https://github.com/Esri/esri-leaflet-clustered-feature-layer",
+  "_release": "2.0.0-beta.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.0-beta.1",
+    "commit": "0953cc4f5401cc49707ea6a0a2e521f55714f8ae"
+  },
+  "_source": "https://github.com/Esri/esri-leaflet-clustered-feature-layer.git",
+  "_target": "^2.0.0-beta.1",
+  "_originalSource": "esri-leaflet-clustered-feature-layer"
+}
