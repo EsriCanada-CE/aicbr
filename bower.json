@@ -1,0 +1,39 @@
+{
+  "name": "aicbr-map",
+  "description": "",
+  "main": "index.html",
+  "authors": [
+    "Education and Research, Esri Canada"
+  ],
+  "license": "GPL-3.0",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "dev/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "jQuery.mmenu": "^6.1.0",
+    "leaflet": "^1.1.0",
+    "esri-leaflet": "^2.0.8",
+    "font-awesome": "fontawesome#^4.7.0",
+    "esri-leaflet-clustered-feature-layer": "^2.0.0",
+    "leaflet.markercluster": "^1.0.6",
+    "esri-leaflet-geocoder": "^2.2.4",
+    "bootstrap": "^3.3.7",
+    "d3": "^4.9.1",
+    "requirejs": "^2.3.3",
+    "fastclick": "^1.0.6",
+    "Leaflet.extra-markers": "^1.0.6",
+    "leaflet.locatecontrol": "^0.62.0",
+    "leaflet.zoomhome": "^0.2.0",
+    "leaflet-default-extent": "https://github.com/nguyenning/Leaflet.defaultextent.git#^0.0.2"
+  },
+  "resolutions": {
+    "leaflet.markercluster": "^1.0.6"
+  }
+}

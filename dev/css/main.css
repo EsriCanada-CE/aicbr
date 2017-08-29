@@ -1,0 +1,196 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Lato,sans-serif;
+}
+.calcite-nav-top .calcite-map .leaflet-control-zoom {
+  margin-top: 28px;
+}
+
+.calcite-navbar-search {
+  margin-top: 0;
+  margin-right: 5px;
+  padding: 5px 0;
+}
+
+.calcite-maps .esri-truncated-attribution {
+  max-width: 100% !important;
+  width: auto;
+  text-align: right;
+  left: initial;
+}
+
+.calcite-title-main a {
+    color: white;
+}
+
+.leaflet-touch .leaflet-bar {
+  border: none;
+}
+
+.aicbr-bgcolor {
+    background-color: rgba(0,31,61,.6)!important;
+}
+
+.aicbr-nav {
+    z-index:2002;
+}
+
+@media (max-width: 480px) {
+    .hidden-xxs {
+       display: none!important;
+    }
+}
+
+@media (max-width: 960px) {
+    .calcite-title .hidden-xs {
+       display: none!important;
+    }
+}
+
+/* overrride calcite's menu width... */
+.dropdown-menu {
+    min-width: 290px;
+}
+
+.calcite-dropdown .dropdown-menu.calcite-menu-drawer {
+    left: -300px;
+}
+
+.mm-listview>li>a, .mm-listview>li>span { color: inherit !important; }
+
+.mm-navbars-bottom .fa {
+  opacity: 0.6;
+  transition: 0.4s;
+}
+
+.mm-navbars-bottom .fa:hover {
+  opacity: 1;
+}
+
+.mm-navbars-bottom .fa-twitter {
+    color: #1cc1f7 !important;
+}
+
+.mm-navbars-bottom .fa-facebook {
+    color: #43609c !important;
+}
+
+.mm-navbars-bottom .fa-linkedin-square {
+  color: #0077B5 !important;
+}
+
+.mm-navbars-bottom .fa-youtube-play {
+  color: #cc181e !important;
+}
+
+.aicbr-logo {
+    background: url(../img/aicbr-icon-small.png) no-repeat center center;
+    width: 49px;
+    height: 45px;
+    display:block;
+}
+
+.aicbr-logo-label {
+  margin: 0 0 0 13px;
+}
+
+.calcite-layout-small-title .calcite-navbar {
+    height: 50px;
+    min-height: 50px;
+}
+
+.geocoder-control .geocoder-control-input, .geocoder-control {
+  height: 40px;
+}
+
+.calcite-layout-small-title .calcite-dropdown .dropdown-toggle {
+    padding: 17px 20px 14px 21px;
+}
+
+.calcite-layout-small-title.calcite-nav-top .calcite-dropdown .calcite-menu-drawer, .calcite-layout-small-title.calcite-nav-top-fixed .calcite-dropdown .calcite-menu-drawer {
+  top: 50px;
+}
+
+#about-modal, #program-modal {
+  z-index: 10000;
+}
+
+.modal-close {
+  padding: 0;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+  -webkit-appearance: none;
+  float: right;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .2;
+  user-select:none;
+}
+
+#about-modal .modal-title {
+  background: url(../img/aicbr-logo-large.png) no-repeat center center;
+  background-size: contain;
+  height: 135px;
+}
+
+#about-modal .about-details {
+    font-size: 1.2em;
+    padding: 15px;
+    padding-top: 0;
+    line-height: 1.6em;
+}
+
+/* borrowing the basmape icon content from calcite's glyphyicon style */
+.basemap-icon:before {
+    content: "\e010";
+}
+
+.pt-filters.mm-listview>li>span, .tg-filters.mm-listview>li>span, .com-filters.mm-listview>li>span {
+  padding-right: 50px;
+}
+
+/* basemap and territory picker stuff */
+.mm-menu label.mm-check:before {
+    pointer-events: none;
+    border: 0;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 0;
+    opacity: 1;
+    border-radius: 10px;
+    top: 50%;
+    right: 0;
+    position:absolute;
+    transition:.3s;
+}
+
+.mm-menu input.mm-check:checked~label.mm-check:before {
+  background-color:#2196F3;
+}
+
+.basemaps > li > a {
+  cursor: pointer;
+}
+
+/* reset button for filter menus */
+.mm-menu ul > li > .reset {
+  text-align:right;
+  opacity:0.5;
+  transition:0.3s;
+  cursor:pointer;
+  user-select:none;
+}
+
+.mm-menu ul > li > .reset.enabled {
+  color: #2196F3 !important;
+}
+
+.mm-menu ul > li > .reset.enabled:hover {
+  opacity:1;
+}
