@@ -44,7 +44,7 @@ define({
           "text": {"classname": "healthy-eating-text", "colour": "#ef9228", "colourname": "orange"},
           "pie": { "filling": "#ef9228", "crust": "#d47810" },
           "iconColor": "white",
-          "icon": "fa-heartbeat",
+          "icon": "fa-bicycle",
           "shape": "circle",
           "prefix": "fa"
         },
