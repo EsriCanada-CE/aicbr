@@ -35,7 +35,7 @@ define({
           "text": {"classname": "active-living-text", "colour": "#1068b5", "colourname": "blue"},
           "pie": { "filling": "#1068b5", "crust": "#0c4d86" },
           "iconColor": "white",
-          "icon": "fa-heartbeat",
+          "icon": "fa-bicycle",
           "shape": "circle",
           "prefix": "fa"
         },
