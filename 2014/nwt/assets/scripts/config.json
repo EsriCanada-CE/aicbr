@@ -117,7 +117,7 @@
       "shape": "square"
     },
     "active-living": {
-      "icon": "fa-heartbeat",
+      "icon": "fa-bicycle",
       "prefix": "fa",
       "markerColor": "blue",
       "shape": "circle"
