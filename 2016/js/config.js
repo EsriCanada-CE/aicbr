@@ -18,7 +18,7 @@ define({
   "program_types": {
     "yes_no_fields": {
       "pt_active_living": {"label": "Active Living", "colour": "#1068b5", "order": 0}, // YT & NWT
-      "pt_healthy_eating": {"label": "Healthy Eating", "colour": "#ef9228", "order": 1}, // YT & NTW
+      "pt_healthy_eating": {"label": "Healthy Eating", "colour": "#ef9228", "order": 1}, // YT & NWT
       "pt_mental_health": {"label": "Mental Health", "colour": "#aeaeae", "order": 2}, // YT
       "pt_cultural_activities": {"label": "Cultural Activities", "colour": "#aeaeae", "order": 3}, // YT
       "pt_youth_leadership": {"label": "Youth Leadership", "colour": "#aeaeae", "order": 4}, // YT
@@ -68,12 +68,12 @@ define({
       "tg_families": {"label": "Families", "order": 3},
       "tg_adults": {"label": "Adults", "order": 4},
       "tg_seniors": {"label": "Seniors/Elders", "order": 5},
-      "tg_income": {"label": "Low Income", "order": 6},
-      "tg_disabilities": {"label": "Disabilities",  "order": 7}, // YT <- !!!! ?!?!
-      "tg_disability": {"label": "Disabilities",  "order": 8},// NWT <- !!!! ?!?!
+      "tg_income": {"label": "People living with low income", "order": 6},
+      "tg_disabilities": {"label": "People living with disabilities",  "order": 7}, // YT <- !!!! ?!?!
+      "tg_disability": {"label": "People living with disabilities",  "order": 8},// NWT <- !!!! ?!?!
       "tg_natal": {"label": "Pre/Post-Natal", "order": 9},
-      "tg_menonly": {"label": "People living with disabilities", "order": 10},
-      "tg_womengirls":  {"label": "People living with low income", "order": 11},
+      "tg_menonly": {"label": "Men", "order": 10},
+      "tg_womengirls":  {"label": "Women", "order": 11},
       "tg_other": {"label": "Other", "order": 12}
     },
     "explain_other_field": "tg_explainother",
