@@ -5,7 +5,7 @@ define(
 
     "jquery",
     "leaflet",
-    "meld",
+    //"meld",
     "esri-leaflet",
     "esri-leaflet-geocoder",
     "leaflet-markers",
@@ -16,22 +16,17 @@ define(
 
     $,
     L,
-    meld,
+    //meld,
     esri,
-    geocoder
+    Geocoding
 
   ) {
 
     /**
      * Private
      */
-
+    var map, eventLayer, communityList = false;
     var _eventsToggled = [],
-    _communityFilter = "",
-    _targetGroupFilter = "",
-    _allCommunities = false,
-    _typeFilter,
-    _allFilters = [],
     _curFeature,
 
     _inIFrame = function() {
@@ -44,44 +39,37 @@ define(
 
     },
 
-    _constructFinalArray = function() {
+    _setWhereFilter = function(where, zoom) {
 
-      var array = [];
-
-      if (_communityFilter !== "") array.push(_communityFilter);
-      if (_targetGroupFilter !== "") array.push(_targetGroupFilter);
-      if (_typeFilter !== "") array.push(_typeFilter);
-
-      return array;
-
-    },
-
-    _constructQuery = function(array, delimiter, field) {
-
-      // If field is provided, changes query to type query
-      return (array.length === 0) ?
-        "1 = 0" :
-        field ?
-          (field + " IN ('" + array.join(delimiter) + "')") :
-          ("(" + array.join(delimiter) + ")");
-
-    },
-
-    _setWhereFilter = function(zoom) {
-
-      // Might need to rethink this logic...
-      var where = _constructQuery(_allFilters, ") AND (");
-      if (zoom || _allCommunities || _communityFilter.length > 0) {
-        this.eventLayer.query().where(where).bounds(function(error, bounds) {
-          _allCommunities = false;
-          this.map.fitBounds(bounds);
-          this.eventLayer.setWhere(where);
-          // this.eventLayer._update();
+      if (zoom) {
+        var q = eventLayer.query().where(where);
+        q.bounds(function(error, bounds) {
+          if (bounds) map.fitBounds(bounds);
+          eventLayer.setWhere(where);
           return;
-        }.bind(this));
+        });
+        if (communityList === false)
+        {
+          communityList = {};
+          q.run(function(error, featureCollection){
+            $.each(featureCollection.features, function(i, feature) {
+              communityList[feature.properties.community] = true;
+            });
+            var comFilters = $('ul.com-filters');
+            comFilters.append('<li><a class="label reset">Reset</a></li>');
+            $.each(communityList, function(comm) {
+
+              var tcCom = comm.replace(/-/g," ").toTitleCase().replace(
+                /Behchokoe/g, "Behchokö").replace(/Lutselk\ E/g,"Lutselk'e");
+
+              comFilters.append('<li><span class="label">' + tcCom + '</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="' + comm + '">      <span class="slider round">    </span>  </label></li>');
+
+            });
+            comFilters.find('.loading-label').closest("li").remove();
+          });
+        }
       } else {
-        this.eventLayer.setWhere(where);
-        // this.eventLayer._update();
+        eventLayer.setWhere(where);
       }
 
     },
@@ -103,31 +91,81 @@ define(
 
     },
 
-    _changeFilter = function(e, field) {
+    applyFilter = function(e) {
 
       e.preventDefault();
-      var classString = e.target.className.toString();
-      var searchClass = "." + classString.replace(" core-selected", "").replace(/ /g, ".");
 
-      if ($(searchClass)[0].checked) {
-        var filter = searchClass.split("_").pop();
-
-        switch(field) {
-
-          case this.config.communityTypes.field:
-            if (filter == 'all') _allCommunities = true;
-            _communityFilter = _setFilter(filter, field);
-            break;
-
-          case this.config.targetGroupTypes.field:
-            _targetGroupFilter = _setFilter(filter, field);
-            break;
-
-        }
-
-        _allFilters = _constructFinalArray.call(this);
-        _setWhereFilter.call(this);
+      var target = $(e.target);
+      if (target.hasClass("reset"))
+      {
+        target.closest("ul").find('.program-filter').prop('checked',false);
       }
+      else if (!target.hasClass("program-filter")) {
+        return;
+      }
+
+      var selectedProgramTypes = [];
+      var selectedTargetGroups = [];
+      var selectedCommunities = [];
+
+      var ptFilters = $('ul.pt-filters input');
+      var ptSelected = ptFilters.filter(':checked');
+      var tgFilters = $('ul.tg-filters input');
+      var tgSelected = tgFilters.filter(':checked');
+      var comFilters = $('ul.com-filters input');
+      var comSelected = comFilters.filter(':checked');
+
+      if (ptSelected.length > 0 && ptSelected.length < ptFilters.length)
+      {
+        $('ul.pt-filters .reset').addClass('enabled');
+        ptSelected.each(function(){
+          selectedProgramTypes.push($(this).val());
+        });
+      } else $('ul.pt-filters .reset').removeClass('enabled');
+
+      if (tgSelected.length > 0 && tgSelected.length < tgFilters.length)
+      {
+        $('ul.tg-filters .reset').addClass('enabled');
+        tgSelected.each(function(){
+          var tg = $(this).val();
+          selectedTargetGroups.push(tg);
+          if (tg == "disabilities") {
+            selectedTargetGroups.push("People living with disabilities");
+          }
+        });
+      } else $('ul.tg-filters .reset').removeClass('enabled');
+
+      if (comSelected.length > 0 && comSelected.length < comFilters.length)
+      {
+        $('ul.com-filters .reset').addClass('enabled');
+        comSelected.each(function(){
+          selectedCommunities.push($(this).val());
+        });
+      } else $('ul.com-filters .reset').removeClass('enabled');
+
+      var conditions = [];
+      if (selectedProgramTypes.length > 0)
+      {
+        conditions.push("type_ in ('" + selectedProgramTypes.join("','") + "')");
+      }
+
+      if (selectedTargetGroups.length > 0)
+      {
+        conditions.push("target_group in ('" + selectedTargetGroups.join("','") + "')");
+      }
+
+      if (selectedCommunities.length > 0)
+      {
+        conditions.push("community in ('" + selectedCommunities.join("','") + "')");
+      }
+
+      var where = "1=1";
+      if (conditions.length > 0)
+      {
+        where = conditions.join(" and ");
+      }
+
+      _setWhereFilter(where, target.closest("ul").hasClass("com-filters"));
 
     },
 
@@ -139,7 +177,7 @@ define(
         .addControl(L.control.defaultExtent());
 
       // Check if loaded in an iframe for scroll zoom
-      map.scrollWheelZoom = !_inIFrame();
+      //map.scrollWheelZoom = !_inIFrame();
 
       return map;
 
@@ -147,21 +185,16 @@ define(
 
     _initGeocoder = function() {
 
-      // Specify provider
-      var arcgisOnline = geocoder.arcgisOnlineProvider(),
-      // Create the geocoding control and add it to the map
-      searchControl = geocoder.geosearch({
-        providers: [arcgisOnline]
-      });
-      // Add geocoderControl to navbar instead of map
-      searchControl._map = this.map;
-
-      var geocoderDiv = searchControl.onAdd(this.map);
-      $(".geocoder")[0].appendChild(geocoderDiv);
-
-      meld.after(searchControl, "clear", function() {
-        $(".toolbar-header, .aicbr-logo").removeClass("geocoder-toggled");
-      });
+      var parentName = $(".geocoder-control").parent().attr("id"),
+          geocoder = $(".geocoder-control"),
+          width = $(window).width();
+      if (width <= 767 && parentName !== "geocodeMobile") {
+          geocoder.detach();
+          $("#geocodeMobile").append(geocoder);
+      } else if (width > 767 && parentName !== "geocode"){
+          geocoder.detach();
+          $("#geocode").append(geocoder);
+      }
 
     },
 
@@ -240,50 +273,9 @@ define(
 
     },
 
-    _setAboutModal = function() {
-
-      var imgClass = "about-img",
-      imgContainerClass = "about-img-container",
-      detailsClass = "about-details",
-      img = "<div class='" + imgContainerClass + "'><img src='" + this.config.about.img + "' class ='" + imgClass + "'></img></div>",
-      body = [];
-      $(".modal-title")[0].innerHTML = img;
-      body.push("<div class = '" + detailsClass + "'>");
-      body.push(this.config.about.desc);
-      body.push("</div>");
-
-      var html = body.join("");
-
-      $("#feature-info")[0].innerHTML = html;
-
-    },
-
     /**
      * Public
      */
-
-    onToggleType = function(e) {
-
-      var classString = e.target.className.toString().replace(" core-selected", "");
-      var type = classString.split("_").pop();
-      _checkArray(_eventsToggled, type);
-      _typeFilter = _constructQuery(_eventsToggled, "', '", this.config.eventTypes.field);
-      _allFilters = _constructFinalArray.call(this);
-      _setWhereFilter.call(this);
-
-    },
-
-    onChangeCommunity = function(e) {
-
-      _changeFilter.call(this, e, this.config.communityTypes.field);
-
-    },
-
-    onChangeTargetGroup = function(e) {
-
-      _changeFilter.call(this, e, this.config.targetGroupTypes.field);
-
-    },
 
     onToggleGeocoder = function() {
 
@@ -321,14 +313,6 @@ define(
 
     },
 
-    onShowAbout = function() {
-
-      this.map.closePopup();
-      _setAboutModal.call(this);
-      $('#feature-modal').modal('show');
-
-    },
-
     init = function(config) {
 
       this.config = $.extend(this.config, config);
@@ -338,10 +322,77 @@ define(
       _initGeocoder.call(this);
       _initGeolocate.call(this);
       this.eventLayer = this.config.map.settings.layers[0];
-      _typeFilter = _constructQuery(_eventsToggled, "', '", this.config.eventTypes.field);
-      _allFilters = _constructFinalArray.call(this);
-      _setWhereFilter.call(this, true);
 
+      map = this.map;
+      eventLayer = this.eventLayer;
+
+      map.attributionControl.setPrefix((map.attributionControl.options.prefix ? map.attributionControl.options.prefix + " | " : "") + 'Designed by <a href="//esri.ca/" target="_blank">Esri Canada</a>');
+
+      _setWhereFilter("1=1", true);
+
+      var searchControl = Geocoding.geosearch({
+        expanded: true,
+        collapseAfterResult: false,
+        zoomToResult: false,
+        useMapBounds: false,
+        placeholder: "Search for places or addresses"
+      }).addTo(map);
+
+      searchControl.on('results', function(data){
+          if (data.results.length > 0) {
+              var popup = L.popup()
+                  .setLatLng(data.results[0].latlng)
+                  .setContent(data.results[0].text)
+                  .openOn(map);
+              map.setView(data.results[0].latlng)
+          }
+      });
+
+      // Search
+      var input = $(".geocoder-control-input");
+
+      input.focus(function(){
+          $("#panelSearch .panel-body").css("height", "150px");
+      });
+
+      input.blur(function(){
+           $("#panelSearch .panel-body").css("height", "auto");
+      });
+
+      // Attach search control for desktop or mobile
+      function attachSearch() {
+          var parentName = $(".geocoder-control").parent().attr("id"),
+              geocoder = $(".geocoder-control"),
+              width = $(window).width();
+          if (width <= 767 && parentName !== "geocodeMobile") {
+              geocoder.detach();
+              $("#geocodeMobile").append(geocoder);
+          } else if (width > 767 && parentName !== "geocode"){
+              geocoder.detach();
+              $("#geocode").append(geocoder);
+          }
+      }
+
+      // When the window is resized, check whether the search widget should
+      // be visible in the calcite header, or accessed through the side menu.
+      $(window).resize(function() {
+          attachSearch();
+      });
+
+      attachSearch();
+
+      $("#menu").removeClass("hidden");
+      $('.about-details').html(this.config.about.desc);
+      $("#menu .about-item").click(function(){
+        map.closePopup();
+        eventLayer.cluster.unspiderfy();
+        $(".calcite-dropdown.open .dropdown-toggle").click();
+        $('#about-modal').modal('show');
+      });
+      $(".modal-close").click(function(){
+        $('#about-modal').modal('hide');
+        $('#program-modal').modal('hide');
+      });
     };
 
     return {
@@ -350,14 +401,11 @@ define(
       map: null,
       eventLayer: null,
       init: init,
-      onToggleType: onToggleType,
-      onChangeCommunity: onChangeCommunity,
-      onChangeTargetGroup: onChangeTargetGroup,
       onToggleGeocoder: onToggleGeocoder,
       onOpenPopup: onOpenPopup,
       onCloseModal: onCloseModal,
       onExpandPopup: onExpandPopup,
-      onShowAbout: onShowAbout
+      applyFilter: applyFilter
 
     };
 

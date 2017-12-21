@@ -3,7 +3,7 @@
 define(
   [
 
-    'fastclick'
+    //'fastclick'
 
   ], function(
 
@@ -13,7 +13,7 @@ define(
 
     var init = function() {
 
-      new FastClick(document.body);
+      //new FastClick(document.body);
 
     };
 

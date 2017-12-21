@@ -143,6 +143,8 @@ define(
         var configPath = "assets/scripts/config.json";
         _getConfig(configPath).then(function(config) {
 
+          $('#location-title').html(config.locationTitle);
+
           // load Map Services
           var layers = mapServices.loadServices(config);
           // if (isIE) config.IE = true;

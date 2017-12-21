@@ -48,9 +48,12 @@ define(
         r = options.outerRadius ? options.outerRadius : 28, //Default outer radius = 28px
         rInner = options.innerRadius ? options.innerRadius : r - 10, //Default inner radius = r-10
         strokeWidth = options.strokeWidth ? options.strokeWidth : 1, //Default stroke is 1
-        pathClassFunc = options.pathClassFunc ? options.pathClassFunc : function() {
-          return '';
-        }, //Class for each path
+        pieFilling = options.pieFilling ? options.pieFilling : function() {
+          return "#aeaeae";
+        }, // Filling for each path
+        pieCrust = options.pieCrust ? options.pieCrust : function() {
+          return "#9e9e9e";
+        }, // Crust for each path
         pathTitleFunc = options.pathTitleFunc ? options.pathTitleFunc : function() {
           return '';
         }, //Title for each path
@@ -60,11 +63,11 @@ define(
         origo = (r + strokeWidth), // Center coordinate
         w = origo * 2, // width and height of the svg element
         h = w,
-        donut = d3.layout.pie(),
-        arc = d3.svg.arc().innerRadius(rInner).outerRadius(r);
+        donut = d3.pie(),
+        arc = d3.arc().innerRadius(rInner).outerRadius(r);
 
       //Create an svg element
-      var svg = document.createElementNS(d3.ns.prefix.svg, 'svg');
+      var svg = document.createElementNS(d3.namespaces.svg, 'svg');
       //Create the pie chart
       var vis = d3.select(svg)
         .data([data])
@@ -79,7 +82,8 @@ define(
         .attr('transform', 'translate(' + origo + ',' + origo + ')');
 
       arcs.append('svg:path')
-        .attr('class', pathClassFunc)
+        .attr('stroke', pieCrust)
+        .attr('fill', pieFilling)
         .attr('stroke-width', strokeWidth)
         .attr('d', arc)
         .append('svg:title')
@@ -128,8 +132,14 @@ define(
           pieClass: 'cluster-pie',
           pieLabel: n,
           pieLabelClass: 'marker-cluster-pie-label',
-          pathClassFunc: function(d) {
-            return "type_" + d.data.key;
+          pieFilling: function(d) {
+            return d.data.key == "active-living" ? "#1068b5" : "#ef9228";
+          },
+          pieCrust: function(d) {
+            return d.data.key == "active-living" ? "#0c4d86" : "#d47810";
+          },
+          pathTitleFunc: function(d) {
+            return d.data.key + ' (' + d.data.values.length + ' Program' + (d.data.values.length !== 1 ? 's' : '') + ')';
           },
           pathTitleFunc: function(d) {
             return d.data.key.replace('-', ' ').toTitleCase() + ' (' + d.data.values.length + ' Program' + (d.data.values.length !== 1 ? 's' : '') + ')';

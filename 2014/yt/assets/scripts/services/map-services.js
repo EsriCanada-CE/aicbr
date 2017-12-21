@@ -6,7 +6,7 @@ define(
     "jquery",
     "leaflet",
     "esri-leaflet",
-    "esri-leaflet-clustered-feature-layer",
+    "esri-leaflet-cluster",
     "modules/d3-cluster-icon",
     "leaflet-markers"
 

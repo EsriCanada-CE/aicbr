@@ -2,110 +2,187 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="description" content="AICBR Yukon Programs Map">
-    <meta name="author" content="Cameron Plouffe">
-    <link rel="stylesheet" href="assets/styles/style.css" type="text/css" />
-    <link rel="icon" href="assets/img/favicon.ico">
-    <title>AICBR Yukon Programs Map</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Lock viewport to prevent scaling -->
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="description" content="AICBR | Healthy Living Inventory">
+    <link rel="icon" href="img/favicon.ico">
+    <title>AICBR | Healthy Living Inventory</title>
+
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+
+    <!-- Calcite Maps Bootstrap -->
+    <link rel="stylesheet" href="vendor/calcite-maps/css/calcite-maps-bootstrap.min-v0.3.css">
+
+    <!-- Calcite Maps -->
+    <link rel="stylesheet" href="vendor/calcite-maps/css/calcite-maps-esri-leaflet.min-v0.3.css">
+    <link rel="stylesheet" href="vendor/calcite-maps/fonts/calcite/calcite-ui.css">
+
+    <!-- Load Leaflet -->
+    <link rel="stylesheet" href="vendor/leaflet/dist/leaflet.css" />
+    <!-- <script src="vendor/leaflet/dist/leaflet.js"></script> -->
+
+    <!-- <script src="vendor/esri-leaflet/dist/esri-leaflet.js"></script> -->
+
+    <!-- Load Esri Leaflet Geocoder -->
+    <link rel="stylesheet" href="vendor/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css">
+    <!-- <script src="vendor/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.js"></script> -->
+
+    <!-- Load jQuery -->
+    <!--  <script src="vendor/jquery/dist/jquery.min.js"></script> -->
+
+    <!-- Load jQuery.mmenu -->
+
+    <link rel="stylesheet" href="vendor/jQuery.mmenu/dist/jquery.mmenu.all.css" />
+    <!-- <script src="vendor/jQuery.mmenu/dist/jquery.mmenu.all.js"></script> -->
+
+    <!-- Load D3 -->
+    <!-- <script src="vendor/d3/d3.min.js"></script> -->
+
+    <!-- Load Bootstrap -->
+    <!-- <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script> -->
+
+    <!-- Load leaflet-default-extent -->
+    <link rel="stylesheet" href="vendor/leaflet-default-extent/dist/leaflet.defaultextent.css" />
+    <!-- <script src="vendor/leaflet-default-extent/dist/leaflet.defaultextent.js"></script> -->
+
+    <!-- Load leaflet.extra-markers -->
+    <link rel="stylesheet" href="vendor/Leaflet.extra-markers/dist/css/leaflet.extra-markers.min.css" />
+    <!-- <script src="vendor/Leaflet.extra-markers/dist/js/leaflet.extra-markers.min.js"></script> -->
+
+    <!-- Load leaflet.markercluster -->
+    <link rel="stylesheet" href="vendor/leaflet.markercluster/dist/MarkerCluster.css" />
+    <!-- <link rel="stylesheet" href="vendor/leaflet.markercluster/dist/MarkerCluster.Default.css" /> -->
+    <!-- <script src="vendor/leaflet.markercluster/dist/leaflet.markercluster.js"></script> -->
+
+    <link rel="stylesheet" href="css/style.css">
+
   </head>
-  <body>
-    <nav id="menu" class="no-display">
-      <ul>
-        <li>
-          <span>Program Types</span>
-          <ul>
-            <li>
-              <span>Healthy Eating</span>
-              <paper-toggle-button checked class="menu-toggle blue toggle-button_healthy-eating"></paper-toggle-button>
-            </li>
-            <li>
-              <span>Active Living</span>
-              <paper-toggle-button checked class="menu-toggle blue toggle-button_active-living"></paper-toggle-button>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <span>Commmunity</span>
-          <ul>
-            <paper-radio-group class="menu-radio-group" selected="0">
-                <paper-radio-button label="All" class="menu-radio menu-radio-community radio-button_all"></paper-radio-button><br />
-                <paper-radio-button label="Beaver Creek" class="menu-radio menu-radio-community radio-button_beaver-creek"></paper-radio-button><br />
-                <paper-radio-button label="Burwash Landing" class="menu-radio menu-radio-community radio-button_burwash-landing"></paper-radio-button><br />
-                <paper-radio-button label="Carcross" class="menu-radio menu-radio-community radio-button_carcross"></paper-radio-button><br />
-                <paper-radio-button label="Carmacks" class="menu-radio menu-radio-community radio-button_carmacks"></paper-radio-button><br />
-                <paper-radio-button label="Dawson City" class="menu-radio menu-radio-community radio-button_dawson-city"></paper-radio-button><br />
-                <paper-radio-button label="Destruction Bay" class="menu-radio menu-radio-community radio-button_destruction-bay"></paper-radio-button><br />
-                <paper-radio-button label="Faro" class="menu-radio menu-radio-community radio-button_faro"></paper-radio-button><br />
-                <paper-radio-button label="Haines Junction" class="menu-radio menu-radio-community radio-button_haines-junction"></paper-radio-button><br />
-                <paper-radio-button label="Mayo" class="menu-radio menu-radio-community radio-button_mayo"></paper-radio-button><br />
-                <paper-radio-button label="Marsh Lake" class="menu-radio menu-radio-community radio-button_marsh-lake"></paper-radio-button><br />
-                <paper-radio-button label="Mount Lorne" class="menu-radio menu-radio-community radio-button_mount-lorne"></paper-radio-button><br />
-                <paper-radio-button label="Old Crow" class="menu-radio menu-radio-community radio-button_old-crow"></paper-radio-button><br />
-                <paper-radio-button label="Pelly Crossing" class="menu-radio menu-radio-community radio-button_pelly-crossing"></paper-radio-button><br />
-                <paper-radio-button label="Ross River" class="menu-radio menu-radio-community radio-button_ross-river"></paper-radio-button><br />
-                <paper-radio-button label="Tagish" class="menu-radio menu-radio-community radio-button_tagish"></paper-radio-button><br />
-                <paper-radio-button label="Teslin" class="menu-radio menu-radio-community radio-button_teslin"></paper-radio-button><br />
-                <paper-radio-button label="Watson Lake" class="menu-radio menu-radio-community radio-button_watson-lake"></paper-radio-button><br />
-                <paper-radio-button label="Whitehorse" class="menu-radio menu-radio-community radio-button_whitehorse"></paper-radio-button><br />
-            </paper-radio-group>
-          </ul>
-        </li>
-        <li>
-          <span>Target Group</span>
-          <ul>
-            <paper-radio-group class="menu-radio-group" selected="0">
-                <paper-radio-button label="All" class="menu-radio menu-radio-target-group radio-button_all"></paper-radio-button><br />
-                <paper-radio-button label="Everyone" class="menu-radio menu-radio-target-group radio-button_everyone"></paper-radio-button><br />
-                <paper-radio-button label="Other" class="menu-radio menu-radio-target-group radio-button_other"></paper-radio-button><br />
-                <paper-radio-button label="Seniors/Elders" class="menu-radio menu-radio-target-group radio-button_seniors"></paper-radio-button><br />
-                <paper-radio-button label="Families" class="menu-radio menu-radio-target-group radio-button_families"></paper-radio-button><br />
-                <paper-radio-button label="Children (5-12)" class="menu-radio menu-radio-target-group radio-button_children"></paper-radio-button><br />
-                <paper-radio-button label="Youth (13-19)" class="menu-radio menu-radio-target-group radio-button_youth"></paper-radio-button><br />
-                <paper-radio-button label="Adults" class="menu-radio menu-radio-target-group radio-button_adults"></paper-radio-button><br />
-                <paper-radio-button label="Students" class="menu-radio menu-radio-target-group radio-button_students"></paper-radio-button><br />
-                <paper-radio-button label="Pre-school Children (1-4)" class="menu-radio menu-radio-target-group radio-button_pre-school"></paper-radio-button><br />
-                <paper-radio-button label="Women/Girls Only" class="menu-radio menu-radio-target-group radio-button_women"></paper-radio-button><br />
-                <paper-radio-button label="Pre/Post Natal" class="menu-radio menu-radio-target-group radio-button_natal"></paper-radio-button><br />
-                <paper-radio-button label="People living with low income" class="menu-radio menu-radio-target-group radio-button_low-income"></paper-radio-button><br />
-                <paper-radio-button label="Men/Boys Only" class="menu-radio menu-radio-target-group radio-button_men"></paper-radio-button><br />
-            </paper-radio-group>
-          </ul>
-        </li>
-        <li><a href="#" class="menu-about">About</a></li>
-      </ul>
-    </nav>
-    <div class="wrapper">
-      <core-header-panel>
-        <core-toolbar class="core-narrow">
-          <paper-icon-button class="menu-button" icon="menu"></paper-icon-button>
-          <span class="aicbr-logo"></span>
-          <span class="toolbar-header" flex>Yukon Programs</span>
-          <paper-icon-button class="search-button" icon="search"></paper-icon-button>
-        </core-toolbar>
-        <div class="geocoder"></div>
-        <div id="map" class="custom-popup"></div>
-        <div id="feature-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="feature-modal" aria-hidden="true">
-          <div class="modal-dialog modal-lrg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="modal-close" aria-hidden="true">&times;</button>
-                <h4 class="modal-title popup-title" id="feature-title"></h4>
+  <body class="calcite-maps calcite-nav-top calcite-layout-small-title">
+
+    <div id="main-page">
+      <div class="overlay"></div>
+
+      <!-- Navbar -->
+      <div id="main-content">
+        <nav class="navbar calcite-navbar navbar-fixed-top calcite-text-light aicbr-bgcolor aicbr-nav">
+          <!-- Menu -->
+          <div class="dropdown calcite-dropdown calcite-bg-custom calcite-text-light" role="presentation">
+            <a class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">
+              <div class="calcite-dropdown-toggle">
+                <span class="sr-only">Toggle dropdown menu</span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
               </div>
-              <div class="modal-body" id="feature-info"></div>
-            </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-      </core-header-panel>
+            </a>
+            <div class="dropdown-menu calcite-menu-drawer aicbr-bgcolor">
+              <nav id="menu" class="hidden">
+                <ul>
+                  <li>
+                    <span><i class="fa fa-list fa-fw"></i>&nbsp; Program Types</span>
+                    <ul class="pt-filters filter-menu mm-listview">
+                      <li><a class="label reset">Reset</a></li>
+                      <li><span class="label">Active Living</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="active-living">      <span class="slider round" style="background-color: rgb(16, 104, 181);">    </span>  </label></li>
+                      <li><span class="label">Healthy Eating</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="healthy-eating">      <span class="slider round" style="background-color: rgb(239, 146, 40);">    </span>  </label></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span><i class="fa fa-home fa-fw"></i>&nbsp; Commmunity</span>
+                    <ul class="com-filters filter-menu mm-listview">
+                      <li><span class="loading-label">Loading...</span></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <span><i class="fa fa-users fa-fw"></i>&nbsp; Target Group</span>
+                    <ul class="tg-filters filter-menu mm-listview">
+                      <li><a class="label reset">Reset</a></li>
+                      <li><span class="label">Pre-School Children aged 1-4</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="pre-school">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Children aged 5-12</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="children">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Youth aged 13-19</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="youth">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Students</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="students">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Families</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="families">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Adults</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="adults">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Seniors/Elders</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="seniors">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">People living with low-income</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="low-income">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">People living with disabilities</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="disabilities">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Pre/Post-Natal</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="natal">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Men</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="men">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Women</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="women">      <span class="slider round">    </span>  </label></li>
+                      <li><span class="label">Other</span>  <label class="switch">    <input type="checkbox" class="program-filter" value="other">      <span class="slider round">    </span>  </label></li></ul>
+                  </li>
+                  <li class="visible-xs">
+                    <a role="button" data-target="#panelSearch" aria-haspopup="true"><i class="fa fa-search fa-fw"></i>&nbsp; <l class="search-label">Search for places or addresses</l></a>
+                  </li>
+                  <li>
+                    <a class='about-item' role="button"><span><i class="fa fa-info-circle fa-fw"></i>&nbsp; <l class="about-label">About</l></span></a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <!-- Title -->
+          <div class="calcite-title calcite-overflow-hidden">
+            <span class="calcite-title-main">
+              <a href="//aicbr.ca/" target="_blank">
+                <span class="aicbr-logo"></span>
+              </a>
+            </span>
+            <!-- <span class="calcite-title-divider"></span> -->
+            <span class="calcite-title-main">
+              <a href="//aicbr.ca/" class="aicbr-logo-label no-display" target="_blank">AICBR</a><span class="hidden-xs no-display">&nbsp;</span>
+            </span>
+            <!-- <span class="calcite-title-divider hidden-xxs"></span> -->
+            <span class="calcite-title-main">
+              <a class="hidden-xs aicbr-project-title no-display" href="//aicbr.ca/healthy-living-inventory/" target="_blank">Healthy Living Inventory</a><span class="calcite-title-divider not-hidden-xxs"></span><span id="location-title" class="not-hidden-xxs" /></span>
+            </span>
+          </div>
+
+          <ul class="calcite-nav nav navbar-nav">
+            <li><div class="calcite-navbar-search hidden-xs"><div id="geocode"></div></div></li>
+          </ul>
+        </nav><!--/.navbar -->
+
+        <!-- Map Container  -->
+        <div class="calcite-map">
+          <div id="map" class="calcite-map-absolute"></div>
+        </div>
+
+        <!-- Panel -->
+        <div class="calcite-panels calcite-panels-left calcite-bg-custom calcite-text-light panel-group aicbr-bgcolor" role="tablist" aria-multiselectable="true">
+            <!-- Search Panel (for mobile UI) -->
+          <div id="panelSearch" class="panel collapse hidden-sm hidden-md hidden-lg">
+            <div id="headingSearch" class="panel-heading" role="tab">
+              <div class="panel-title">
+                <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapseSearch"  aria-expanded="false" aria-controls="collapseSearch"><span class="glyphicon glyphicon-search" aria-hidden="true"></span><span class="panel-label search-label">Search for places or addresses</span></a>
+                <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelSearch"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>
+              </div>
+            </div>
+            <div id="collapseSearch" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSearch">
+              <div class="panel-body calcite-body-expander">
+                <div id="geocodeMobile"></div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /.calcite-panels -->
+      </div>
     </div>
-    <script src="assets/components/platform/platform.js"></script>
-    <link rel="import" href="assets/components/core-toolbar/core-toolbar.html">
-    <link rel="import" href="assets/components/core-header-panel/core-header-panel.html">
-    <link rel="import" href="assets/components/core-icons/core-icons.html">
-    <link rel="import" href="assets/components/paper-icon-button/paper-icon-button.html">
-    <link rel="import" href="assets/components/paper-toggle-button/paper-toggle-button.html" />
-    <link rel="import" href="assets/components/paper-radio-group/paper-radio-group.html" />
-		<script data-main="assets/scripts/rjs-config.js" src="assets/components/requirejs/require.js"></script></body></html>
+    <div id="about-modal" class="modal no-display fade" tabindex="-1" role="dialog" aria-labelledby="about-modal" aria-hidden="true">
+      <div class="modal-dialog modal-lrg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="modal-close" aria-hidden="true">&times;</button>
+              <h4 class="modal-title popup-title" id="about-title"></h4>
+            </div>
+            <div class="modal-body" id="modal-info">
+              <div class="about-details"></div>
+            </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+    <script data-main="assets/scripts/rjs-config.js" src="assets/components/requirejs/require.js"></script>
+  </body>
+</html>

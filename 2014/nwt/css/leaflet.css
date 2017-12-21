@@ -1,0 +1,62 @@
+.leaflet-control-container .leaflet-bar a:first-child {
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+}
+
+.leaflet-control-container .leaflet-bar a:last-child {
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+}
+
+.leaflet-control-container .leaflet-bar {
+  border-radius: 100px;
+}
+
+.leaflet-touch .leaflet-bar a {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.leaflet-touch .leaflet-bar, .leaflet-touch .leaflet-control-layers {
+    border: 2px solid rgba(0,0,0,.2);
+    background-clip: padding-box;
+}
+
+.leaflet-touch .leaflet-bar, .leaflet-touch .leaflet-control-attribution, .leaflet-touch .leaflet-control-layers {
+    box-shadow: none;
+}
+
+.leaflet-right .leaflet-control {
+    margin-right: 10px !important;
+}
+
+.leaflet-right .leaflet-control.leaflet-control-attribution {
+  margin-right: 0 !important;
+}
+
+.leaflet-top .leaflet-control {
+    margin-top: 10px !important;
+    margin-bottom: 0 !important;
+}
+
+.leaflet-top .leaflet-control:first-child {
+    margin-top: 60px !important;
+}
+
+.leaflet-control-locate a {
+  font-size: 18px;
+}
+
+/* Font for the main number on cluster pie icons */
+.marker-cluster-pie-label {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: Lato,sans-serif;
+    fill: #fff;
+}
+
+/* slight increase to marker width to fix positioning of icons */
+.extra-marker {
+    width: 36px !important;
+}

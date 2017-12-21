@@ -1,9 +1,0 @@
-@function image-url($relative-url) {
-  $tmpUrl: "../../" + $assets_path + $images_path + $relative-url;
-  @return url($tmpUrl);
-}
-
-@function font-url($relative-url) {
-  $tmpUrl: "../../" + $assets_path + $fonts_path + $relative-url;
-  @return url($tmpUrl);
-}

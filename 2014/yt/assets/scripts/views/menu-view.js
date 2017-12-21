@@ -25,29 +25,15 @@ define(
     },
 
 
-    _onToggleType = function(e) {
-
-      mapCtrl.onToggleType(e);
-
-    },
-
-    _onChangeCommunity = function(e) {
-
-      mapCtrl.onChangeCommunity(e);
-
-    },
-
-    _onChangeTargetGroup = function(e) {
-
-      mapCtrl.onChangeTargetGroup(e);
-
-    },
-
     _onToggleGeocoder = function() {
 
       mapCtrl.onToggleGeocoder();
 
     },
+
+    applyFilter = function(e) {
+      mapCtrl.applyFilter(e);
+    }
 
     _registerEventListeners = function() {
 
@@ -59,9 +45,10 @@ define(
         API.open();
       });
       $(".menu-about").on("click", _onShowAbout);
-      $(".menu-toggle").on("change", _onToggleType);
-      $(".menu-radio-community").on("change", _onChangeCommunity);
-      $(".menu-radio-target-group").on("change", _onChangeTargetGroup);
+      $('#menu').on("change", ".pt-filters .program-filter",applyFilter);
+      $('#menu').on("change", ".com-filters .program-filter", applyFilter);
+      $("#menu").on("change", ".tg-filters .program-filter", applyFilter);
+      $('#menu').on("click", ".reset.enabled", applyFilter);
       $(".search-button").on("click", _onToggleGeocoder);
 
     },
@@ -74,9 +61,23 @@ define(
 
       this.config = $.extend(this.config, config);
       if (!this.mmenu) {
-        this.mmenu = $("#menu").mmenu(this.config.mmenu.options, this.config.mmenu.config);
+        this.mmenu = $("#menu").mmenu({
+            offCanvas: false,
+            navbar: {
+                title: ""
+            },
+            navbars: [{
+                position: "bottom",
+                content: [
+                    '<a class="fa fa-lg fa-envelope" href="//www.aicbr.ca/contact-us/" target="_blank"></a>',
+                    '<a class="fa fa-lg fa-twitter" href="https://twitter.com/AicbrYukon" target="_blank"></a>',
+                    '<a class="fa fa-lg fa-facebook" href="https://www.facebook.com/Arctic-Institute-of-Community-Based-Research-947539015291917/?fref=ts" target="_blank"></a>',
+                    '<a class="fa fa-lg fa-linkedin-square" href="https://www.linkedin.com/company/arctic-institute-of-community-based-research?trk=biz-companies-cym" target="_blank"></a>',
+                    '<a class="fa fa-lg fa-youtube-play" href="https://www.youtube.com/channel/UC0vT-yLsTKZMlX2iBmibEgQ" target="_blank"></a>'
+                ]
+            }]
+        });
       }
-      this.mmenu.removeClass("no-display");
 
       _registerEventListeners.call(this);
 

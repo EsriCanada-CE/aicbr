@@ -1,0 +1,98 @@
+/* popup CSS */
+.leaflet-popup {
+  font-family: Lato, sans-serif;
+}
+
+.leaflet-popup-content-wrapper {
+  font-size: 16px;
+  border-radius: 3px;
+}
+
+.leaflet-popup-content {
+  max-width: 250px;
+  width: 250px;
+}
+
+.popup-body a {
+  color: #E63D48;
+  text-decoration: none;
+}
+
+.popup-title {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 24px;
+  color: #003970;
+}
+
+.popup-body {
+  line-height: 20px;
+  font-size: 14px;
+  color: #777777;
+}
+
+.popup-body i.fa {
+  color: #333333;
+  padding-right: 0.2em;
+}
+
+.popup-body p {
+  margin: 0 0 5px 0;
+}
+
+.popup-body ul {
+  list-style-type: none;
+  padding-left: 20px;
+  margin: 0 0 5px 0;
+}
+
+h3.contact-details, h3.program-details {
+  border-bottom: 1px dotted #ccc;
+  font-size: 16px;
+  color: #333333;
+  font-weight: bold;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+p.popup-info {
+  text-align: right;
+}
+
+a.popup-info {
+  cursor: pointer;
+  pointer-events:auto;
+  text-decoration:none;
+}
+
+li.extra-item {
+  display:none;
+}
+
+#program-modal li.extra-hint {
+  display:none;
+}
+
+#program-modal li.extra-item {
+  display:block;
+}
+
+.description {
+  margin: 12px 0;
+  overflow: auto;
+  max-height: 170px;
+  pointer-events: auto;
+}
+
+.no-display {
+  display: none;
+}
+
+.leaflet-popup {
+  pointer-events: none;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  pointer-events:auto;
+}
