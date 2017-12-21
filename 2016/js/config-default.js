@@ -18,7 +18,7 @@ define({
   "program_types": {
     "yes_no_fields": {
       "pt_active_living": {"label": "Active Living", "colour": "#1068b5", "order": 0}, // YT & NWT
-      "pt_healthy_eating": {"label": "Healthy Eating", "colour": "#ef9228", "order": 1}, // YT & NWT
+      "pt_healthy_eating": {"label": "Healthy Eating", "colour": "#ef9228", "order": 1}, // YT & NTW
       "pt_mental_health": {"label": "Mental Health", "colour": "#aeaeae", "order": 2}, // YT
       "pt_cultural_activities": {"label": "Cultural Activities", "colour": "#aeaeae", "order": 3}, // YT
       "pt_youth_leadership": {"label": "Youth Leadership", "colour": "#aeaeae", "order": 4}, // YT
@@ -35,7 +35,7 @@ define({
           "text": {"classname": "active-living-text", "colour": "#1068b5", "colourname": "blue"},
           "pie": { "filling": "#1068b5", "crust": "#0c4d86" },
           "iconColor": "white",
-          "icon": "fa-heartbeat",
+          "icon": "fa-bicycle",
           "shape": "circle",
           "prefix": "fa"
         },
