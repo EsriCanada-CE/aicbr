@@ -5,8 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Lock viewport to prevent scaling -->
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <meta name="description" content="Calcite Maps Demo - Esri-Leaflet">
-    <meta name="author" content="">
+    <meta name="description" content="AICBR | Healthy Living Inventory">
     <link rel="icon" href="img/favicon.ico">
     <title>AICBR | Healthy Living Inventory</title>
 
@@ -154,46 +153,46 @@
         <!-- Panel -->
         <div class="calcite-panels calcite-panels-left calcite-bg-custom calcite-text-light panel-group aicbr-bgcolor" role="tablist" aria-multiselectable="true">
             <!-- Search Panel (for mobile UI) -->
-            <div id="panelSearch" class="panel collapse hidden-sm hidden-md hidden-lg">
-              <div id="headingSearch" class="panel-heading" role="tab">
-                <div class="panel-title">
-                  <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapseSearch"  aria-expanded="false" aria-controls="collapseSearch"><span class="glyphicon glyphicon-search" aria-hidden="true"></span><span class="panel-label search-label">Search for places or addresses</span></a>
-                  <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelSearch"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>
-                </div>
-              </div>
-              <div id="collapseSearch" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSearch">
-                <div class="panel-body calcite-body-expander">
-                  <div id="geocodeMobile"></div>
-                </div>
+          <div id="panelSearch" class="panel collapse hidden-sm hidden-md hidden-lg">
+            <div id="headingSearch" class="panel-heading" role="tab">
+              <div class="panel-title">
+                <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapseSearch"  aria-expanded="false" aria-controls="collapseSearch"><span class="glyphicon glyphicon-search" aria-hidden="true"></span><span class="panel-label search-label">Search for places or addresses</span></a>
+                <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelSearch"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>
               </div>
             </div>
-          </div> <!-- /.calcite-panels -->
-        </div>
+            <div id="collapseSearch" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSearch">
+              <div class="panel-body calcite-body-expander">
+                <div id="geocodeMobile"></div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /.calcite-panels -->
       </div>
-      <div id="about-modal" class="modal no-display fade" tabindex="-1" role="dialog" aria-labelledby="about-modal" aria-hidden="true">
-        <div class="modal-dialog modal-lrg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="modal-close" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title popup-title" id="about-title"></h4>
-                </div>
-                <div class="modal-body" id="modal-info">
-                  <div class="about-details"></div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-      </div>
-      <div id="program-modal" class="modal no-display fade" tabindex="-1" role="dialog" aria-labelledby="program-modal" aria-hidden="true">
-        <div class="modal-dialog modal-lrg">
+    </div>
+    <div id="about-modal" class="modal no-display fade" tabindex="-1" role="dialog" aria-labelledby="about-modal" aria-hidden="true">
+      <div class="modal-dialog modal-lrg">
           <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="modal-close" aria-hidden="true">&times;</button>
                 <h4 class="modal-title popup-title"></h4>
               </div>
-              <div class="modal-body popup-body" id="program-info">
+              <div class="modal-body" id="modal-info">
+                <div class="about-details"></div>
               </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div>
+      <div id="program-modal" class="modal no-display fade" tabindex="-1" role="dialog" aria-labelledby="program-modal" aria-hidden="true">
+        <div class="modal-dialog modal-lrg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="modal-close" aria-hidden="true">&times;</button>
+              <h4 class="modal-title popup-title"></h4>
+            </div>
+            <div class="modal-body popup-body" id="program-info">
             </div>
           </div>
+        </div>
       </div>
     <script data-main="js/rjs-config" src="vendor/requirejs/require.js"></script>
   </body>

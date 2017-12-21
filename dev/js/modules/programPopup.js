@@ -46,7 +46,7 @@ define([
         if (prop.toLowerCase()=="yes") {
           label = targetGroup.label;
         }
-        targetEveryone == targetEveryone && arrayContainsLCString(["na","n/a","yes"], prop.toLowerCase());
+        targetEveryone = targetEveryone && arrayContainsLCString(["na","n/a","yes"], prop.toLowerCase());
       }
       if (label && targetGroup.fieldname == "tg_other" && props[config.target_groups.explain_other_field])
       {
