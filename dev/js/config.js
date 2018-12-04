@@ -1,12 +1,12 @@
 define({
   "territories": {
     "yt": {
-      "layer":  "https://services7.arcgis.com/n6PcuTBOoBVHP4RI/arcgis/rest/services/yt_healthy_living_inventory_public/FeatureServer/0",
+      "layer":  "https://services8.arcgis.com/Ryw8BjFdgxyjmolc/arcgis/rest/services/yt_healthy_living_inventory_2016_public/FeatureServer/0",
       "label": "Yukon Programs",
       "name": "Yukon"
     },
     "nwt": {
-      "layer": "https://services7.arcgis.com/n6PcuTBOoBVHP4RI/arcgis/rest/services/nwt_healthy_living_inventory_public/FeatureServer/0",
+      "layer": "https://services8.arcgis.com/Ryw8BjFdgxyjmolc/arcgis/rest/services/nwt_healthy_living_inventory_2016_public/FeatureServer/0",
       "label": "Northwest Territories Programs",
       "name": "Northwest Territories"
     }
