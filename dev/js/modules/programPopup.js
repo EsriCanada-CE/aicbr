@@ -131,7 +131,7 @@ define([
       {
         body.push('<p><i class="fa fa-list fa-fw"></i><b>' + (ptLabels.length > 1 ? config.labels.programtypes : config.labels.programtype) + ":</b></p><ul><li>" + ptLabels.join("</li><li>") + '</li></ul>');
       } else {
-        body.push('<p><i class="fa fa-list fa-fw"></i><b>' + (ptLabels.length > 1 ? config.labels.programtypes : config.labels.programtype) + ":</b></p><ul><li>" + ptLabels.slice(0,2).join("</li><li>") + '</li><li class="extra-hint"><a class="popup-info"> '+L.Util.template(config.labels.morelink,{n:(tgLabels.length-2)})+'</a></li><li class="extra-item">'+ ptLabels.slice(2).join('</li><li class="extra-item">')+'</li></ul>');
+        body.push('<p><i class="fa fa-list fa-fw"></i><b>' + (ptLabels.length > 1 ? config.labels.programtypes : config.labels.programtype) + ":</b></p><ul><li>" + ptLabels.slice(0,2).join("</li><li>") + '</li><li class="extra-hint"><a class="popup-info"> '+L.Util.template(config.labels.morelink,{n:(ptLabels.length-2)})+'</a></li><li class="extra-item">'+ ptLabels.slice(2).join('</li><li class="extra-item">')+'</li></ul>');
       }
     }
 
