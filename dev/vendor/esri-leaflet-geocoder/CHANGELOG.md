@@ -2,6 +2,70 @@
 
 ## [Upcoming changes][Unreleased]
 
+## [2.2.13] - 2018-07-03
+
+### Fixed
+
+* Ensure results are filtered using country coders when World Geocoding service is used to fetch an address _not_ based on a suggestion.
+
+## [2.2.12] - 2018-06-14
+
+### Changed
+
+* another guess to ensure all built files make it onto npm
+
+## Deprecated - [2.2.11] - 2018-06-14
+
+### Fixed
+
+* patch for another corrupt npm tarball [#202](https://github.com/Esri/esri-leaflet-geocoder/pull/202)
+
+## Deprecated - [2.2.10] - 2018-06-13
+
+### Fixed
+
+* stop throwing an error when no attribution control is present [#194](https://github.com/Esri/esri-leaflet-geocoder/issues/194)
+* ensure suggestions are selected appropriately via touch events [#198](https://github.com/Esri/esri-leaflet-geocoder/issues/198)
+
+## [2.2.9] - 2018-02-22
+
+### Changed
+
+* exclusively use ES6 imports internally.
+* run unit tests on Chrome instead of PhantomJS
+
+## [2.2.8] - 2017-11-21
+
+### Fixed
+
+* `/img` folder was missing in last npm release
+* found fix to ensure we no longer have rogue missing files (hopefuly)
+
+## Deprecated - [2.2.7] - 2017-11-21
+
+### Fixed
+
+* enable touch selection for results [#186](https://github.com/Esri/esri-leaflet-geocoder/issues/186)
+* formatted display text bug [`d5de54b`](https://github.com/Esri/esri-leaflet-geocoder/commit/d5de54b12f9b17e11c46db8d6cea767190420a2e)
+
+## [2.2.6] - 2017-07-27
+
+### Fixed
+
+* `esri-leaflet-geocoder.js` file was missing in last npm release
+
+## Deprecated - [2.2.5] - 2017-07-27
+
+### Changed
+
+* stop including L.Mixin.Events [#180](https://github.com/Esri/esri-leaflet-geocoder/issues/180)
+
+### Fixed
+
+* ensure custom geocoding param names are fetched/used when suggestion support is present [#182](https://github.com/Esri/esri-leaflet-geocoder/issues/182)
+* ensure `magicKey`s are passed through to custom geocoding services [#182](https://github.com/Esri/esri-leaflet-geocoder/issues/182)
+* ensure tests don't `new` up their objects
+
 ## [2.2.4] - 2017-03-22
 
 ### Fixed
@@ -283,7 +347,15 @@ This is now ready for beta! This release helps finalize the API and includes lot
 
 * Initial alpha release
 
-[Unreleased]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.4...HEAD
+[Unreleased]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.12...HEAD
+[2.2.12]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.11...v2.2.12
+[2.2.11]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.10...v2.2.11
+[2.2.10]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.9...v2.2.10
+[2.2.9]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.8...v2.2.9
+[2.2.8]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.7...v2.2.8
+[2.2.7]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.6...v2.2.7
+[2.2.6]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.5...v2.2.6
+[2.2.5]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.4...v2.2.5
 [2.2.4]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.3...v2.2.4
 [2.2.3]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.3...v2.2.2
 [2.2.2]: https://github.com/Esri/esri-leaflet-geocoder/compare/v2.2.2...v2.2.1

@@ -1,14 +1,7 @@
-/*	
- * jQuery mmenu counters add-on
- * mmenu.frebsite.nl
- *
- * Copyright (c) Fred Heusschen
- */
-
 (function( $ ) {
 
-	var _PLUGIN_ = 'mmenu',
-		_ADDON_  = 'counters';
+	const _PLUGIN_ = 'mmenu';
+	const _ADDON_  = 'counters';
 
 
 	$[ _PLUGIN_ ].addons[ _ADDON_ ] = {
@@ -42,7 +35,8 @@
 			this.bind( 'initListview:after',
 				function( $panel )
 				{
-					this.__refactorClass( $('em', $panel), this.conf.classNames[ _ADDON_ ].counter, 'counter' );
+					var cntrclss = this.conf.classNames[ _ADDON_ ].counter;
+					this.__refactorClass( $panel.find( '.' + cntrclss ), cntrclss, _c.counter );
 				}
 			);
 
@@ -72,9 +66,9 @@
 									var $parent = $(this).data( _d.parent );
 									if ( $parent )
 									{
-										if ( !$parent.children( 'em.' + _c.counter ).length )
+										if ( !$parent.find( '.' + _c.counter ).length )
 										{
-											$parent.prepend( $( '<em class="' + _c.counter + '" />' ) );
+											$parent.children( '.' + _c.btn ).prepend( $( '<span class="' + _c.counter + '" />' ) );
 										}
 									}
 								}
@@ -100,7 +94,7 @@
 								return;
 							}
 
-							var $counter = $parent.children( 'em.' + _c.counter );
+							var $counter = $parent.find( '.' + _c.counter );
 							if ( !$counter.length )
 							{
 								return;
@@ -129,7 +123,7 @@
 			_d = $[ _PLUGIN_ ]._d;
 			_e = $[ _PLUGIN_ ]._e;
 	
-			_c.add( 'counter search noresultsmsg' );
+			_c.add( 'counter' );
 		},
 
 		//	clickAnchor: prevents default behavior when clicking an anchor

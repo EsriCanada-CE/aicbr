@@ -1,14 +1,7 @@
-/*	
- * jQuery mmenu scrollBugFix add-on
- * mmenu.frebsite.nl
- *
- * Copyright (c) Fred Heusschen
- */
-
 (function( $ ) {
 
-	var _PLUGIN_ = 'mmenu',
-		_ADDON_  = 'scrollBugFix';
+	const _PLUGIN_ = 'mmenu';
+	const _ADDON_  = 'scrollBugFix';
 
 
 	$[ _PLUGIN_ ].addons[ _ADDON_ ] = {
@@ -50,7 +43,7 @@
 			this.bind( 'open:start',
 				function()
 				{
-					this.$pnls.children( '.' + _c.opened ).scrollTop( 0 );
+					this.$pnls.children( '.' + _c.panel + '_opened' ).scrollTop( 0 );
 				}
 			);
 			this.bind( 'initMenu:after',
@@ -86,12 +79,12 @@
 		var that = this;
 
 	    //	Prevent body scroll
-	    glbl.$docu
+	    $(document)
 	    	.off( _e.touchmove + '-' + _ADDON_ )
 	    	.on( _e.touchmove + '-' + _ADDON_,
 		    	function( e )
 		    	{
-					if ( glbl.$html.hasClass( _c.opened ) )
+					if ( glbl.$html.hasClass( _c.wrapper + '_opened' ) )
 					{
 						e.preventDefault();
 					}
@@ -102,10 +95,10 @@
 	    glbl.$body
 	    	.off( _e.touchstart + '-' + _ADDON_ )
 	    	.on( _e.touchstart + '-' + _ADDON_,
-		    	'.' + _c.panels + '> .' + _c.opened,
+		    	'.' + _c.panels + '> .' + _c.panel,
 		    	function( e )
 		    	{
-			        if ( glbl.$html.hasClass( _c.opened ) )
+			        if ( glbl.$html.hasClass( _c.wrapper + '_opened' ) )
 			        {
 			        	if ( !scrolling )
 						{
@@ -127,10 +120,10 @@
 		    )
 	 		.off( _e.touchmove + '-' + _ADDON_ )
 	 		.on( _e.touchmove + '-' + _ADDON_,
-		 		'.' + _c.panels + '> .' + _c.opened,
+		 		'.' + _c.panels + '> .' + _c.panel,
 		 		function( e )
 		 		{
-			        if ( glbl.$html.hasClass( _c.opened ) )
+			        if ( glbl.$html.hasClass( _c.wrapper + '_opened' ) )
 			        {
 				        if ( $(this)[ 0 ].scrollHeight > $(this).innerHeight() )
 				        {
@@ -147,10 +140,10 @@
 	    		function()
 	    		{
 	    			that.$pnls
-	    				.children( '.' + _c.opened )
+	    				.children( '.' + _c.panel + '_opened' )
 			        	.scrollTop( 0 )
 			        	.css({ '-webkit-overflow-scrolling': 'auto' })
-			        	.css({ '-webkit-overflow-scrolling': "touch" });
+			        	.css({ '-webkit-overflow-scrolling': 'touch' });
 				}
 	    	);
 	};

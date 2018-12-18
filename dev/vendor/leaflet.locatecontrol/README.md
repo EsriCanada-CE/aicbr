@@ -2,10 +2,11 @@
 
 [![Bower version](https://badge.fury.io/bo/leaflet.locatecontrol.svg)](http://badge.fury.io/bo/leaflet.locatecontrol)
 [![npm version](https://badge.fury.io/js/leaflet.locatecontrol.svg)](http://badge.fury.io/js/leaflet.locatecontrol)
+[![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/leaflet.locatecontrol/badge?style=rounded)](https://www.jsdelivr.com/package/npm/leaflet.locatecontrol)
 
 A useful control to geolocate the user with many options. Official [Leaflet](http://leafletjs.com/plugins.html#geolocation) and [MapBox plugin](https://www.mapbox.com/mapbox.js/example/v1.0.0/leaflet-locatecontrol/).
 
-Tested with [Leaflet](http://leafletjs.com/) 1.1 in Firefox, Chrome, and Safari. Tested with [Font Awesome](https://fortawesome.github.io/Font-Awesome/) 4.6.
+Tested with [Leaflet](http://leafletjs.com/) 1.3 in Firefox, Chrome, and Safari. Tested with [Font Awesome](https://fortawesome.github.io/Font-Awesome/) 4.7.
 
 Please check for [breaking changes in the changelog](https://github.com/domoritz/leaflet-locatecontrol/blob/gh-pages/CHANGELOG.md).
 
@@ -41,15 +42,13 @@ The control is [available from JsDelivr CDN](https://www.jsdelivr.com/projects/l
 
 The control uses [Font Awesome](https://fortawesome.github.io/Font-Awesome/) for the icons and if you don't have it included yet, you can use the CSS from the CDN.
 
-Then include the CSS and JavaScript files.
-
-This example shows how to include font awesome from a CDN and the locate control files directly from github. In production, prefer using bower or the Mapbox or JsDelivr CDN.
+Then include the CSS and JavaScript files. In this example, we are loading the [files from the JsDelivr CDN](https://www.jsdelivr.com/package/npm/leaflet.locatecontrol?path=dist). In the URLs below, replace `[VERSION]` with the latest release number or remove `@[VERSION]` to always use the latest version. 
 
 ```html
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[VERSION]/dist/L.Control.Locate.min.css" />
 
-<script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[VERSION]/dist/L.Control.Locate.min.js" charset="utf-8"></script>
 ```
 
 
@@ -79,24 +78,29 @@ Possible options are listed in the following table. More details are [in the cod
 |------------|-----------|-------------------|----------|
 | `position` | `string`  | Position of the control | `topleft` |
 | `layer` | [`ILayer`](http://leafletjs.com/reference.html#ilayer)  | The layer that the user's location should be drawn on. | a new layer |
-| `setView` | `boolean`  or `string`  | Set the map view (zoom and pan) to the user's location as it updates. Options are `false`, `'once'`, `'always'`, `and 'untilPan'` | `untilPan` |
+| `setView` | `boolean`  or `string`  | Set the map view (zoom and pan) to the user's location as it updates. Options are `false`, `'once'`, `'always'`, `'untilPan'`, or `'untilPanOrZoom'` | `'untilPanOrZoom'` |
 | `flyTo` | `boolean` | Smooth pan and zoom to the location of the marker. Only works in Leaflet 1.0+. | `false` |
 | `keepCurrentZoomLevel` | `boolean`  | Only pan when setting the view. | `false` |
 | `clickBehavior` | `object`  | What to do when the user clicks on the control. Has two options `inView` and `outOfView`. Possible values are `stop` and `setView`. | `{inView: 'stop', outOfView: 'setView'}` |
 | `returnToPrevBounds` | `boolean`  | If set, save the map bounds just before centering to the user's location. When control is disabled, set the view back to the bounds that were saved. | `false` |
-| `cacheLocation` | `boolean` | Keep a cache of the location after the user deactivates the control. If set to false, the user has to wait until the locate API returns a new location before they see where they are again. |
+| `cacheLocation` | `boolean` | Keep a cache of the location after the user deactivates the control. If set to false, the user has to wait until the locate API returns a new location before they see where they are again. | `true` |
+| `showCompass` | `boolean` | Show the compass bearing on top of the location marker | `true` |
 | `drawCircle` | `boolean`  | If set, a circle that shows the location accuracy is drawn. | `true` |
 | `drawMarker` | `boolean`  | If set, the marker at the users' location is drawn. | `true` |
-| `markerClass` | `class`  | he class to be used to create the marker. | `L.CircleMarker` |
+| `markerClass` | `class`  | The class to be used to create the marker. | `LocationMarker` |
+| `compassClass` | `class`  | The class to be used to create the marker. | `CompassMarker` |
 | `circleStyle` | [`Path options`](http://leafletjs.com/reference.html#path-options) | Accuracy circle style properties. | see code |
 | `markerStyle` | [`Path options`](http://leafletjs.com/reference.html#path-options) | Inner marker style properties. Only works if your marker class supports `setStyle`. | see code |
+| `compassStyle` | [`Path options`](http://leafletjs.com/reference.html#path-options) | Triangle compass heading marker style properties. Only works if your marker class supports `setStyle`. | see code |
 | `followCircleStyle` | [`Path options`](http://leafletjs.com/reference.html#path-options)  | Changes to the accuracy circle while following. Only need to provide changes. | `{}` |
 | `followMarkerStyle` | [`Path options`](http://leafletjs.com/reference.html#path-options)  | Changes to the inner marker while following. Only need to provide changes. | `{}` |
+| `followCompassStyle` | [`Path options`](http://leafletjs.com/reference.html#path-options)  | Changes to the compass marker while following. Only need to provide changes. | `{}` |
 | `icon` | `string`  | The CSS class for the icon. | `fa fa-map-marker` |
 | `iconLoading` | `string`  | The CSS class for the icon while loading. | `fa fa-spinner fa-spin` |
 | `iconElementTag` | `string`  | The element to be created for icons. | `span` |
 | `circlePadding` | `array`  | Padding around the accuracy circle. | `[0, 0]` |
 | `createButtonCallback` | `function`  | This callback can be used in case you would like to override button creation behavior. | see code |
+| `getLocationBounds` | `function`  | This callback can be used to override the viewport tracking behavior. | see code |
 | `onLocationError` | `function`  | This even is called when the user's location is outside the bounds set on the map. | see code |
 | `onLocationOutsideMapBounds` | `function`  | Use metric units. | see code |
 | `showPopup` | `boolean`  | Display a pop-up when the user click on the inner marker. | `true` |

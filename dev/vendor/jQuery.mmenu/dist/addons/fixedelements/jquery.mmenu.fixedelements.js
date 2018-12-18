@@ -1,7 +1,1 @@
-/*
- * jQuery mmenu fixedElements add-on
- * mmenu.frebsite.nl
- *
- * Copyright (c) Fred Heusschen
- */
-!function(e){var t="mmenu",n="fixedElements";e[t].addons[n]={setup:function(){if(this.opts.offCanvas){var s=this.opts[n],i=this.conf[n];a=e[t].glbl,s=this.opts[n]=e.extend(!0,{},e[t].defaults[n],s);var o=function(e){var t=this.conf.classNames[n].fixed;this.__refactorClass(e.find("."+t),t,"slideout")[i.elemInsertMethod](i.elemInsertSelector)};this.bind("setPage:after",o)}},add:function(){s=e[t]._c,i=e[t]._d,o=e[t]._e,s.add("fixed")},clickAnchor:function(e,t){}},e[t].configuration[n]={elemInsertMethod:"appendTo",elemInsertSelector:"body"},e[t].configuration.classNames[n]={fixed:"Fixed"};var s,i,o,a}(jQuery);
+!function(c){var f,a,s="mmenu",d="fixedElements";c[s].addons[d]={setup:function(){if(this.opts.offCanvas){this.opts[d];var o=this.conf[d];a=c[s].glbl;this.bind("setPage:after",function(s){var t=this.conf.classNames[d].fixed,i=s.find("."+t);this.__refactorClass(i,t,f.slideout),i[o.elemInsertMethod](o.elemInsertSelector);var e=this.conf.classNames[d].sticky,n=s.find("."+e);this.__refactorClass(n,e,f.sticky),(n=s.find("."+f.sticky)).length&&(this.bind("open:start",function(){if("hidden"==a.$html.css("overflow")){var s=a.$wndw.scrollTop()+o.sticky.offset;n.each(function(){c(this).css("top",parseInt(c(this).css("top"),10)+s)})}}),this.bind("close:finish",function(){n.css("top","")}))})}},add:function(){f=c[s]._c,c[s]._d,c[s]._e,f.add("sticky")},clickAnchor:function(s,t){}},c[s].configuration[d]={sticky:{offset:0},elemInsertMethod:"appendTo",elemInsertSelector:"body"},c[s].configuration.classNames[d]={fixed:"Fixed",sticky:"Sticky"}}(jQuery);

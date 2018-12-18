@@ -1,7 +1,6 @@
 /* global define, mixpanel, navigator */
-
 define( [
-    "config",
+    document.location.href.replace(/[^\/]*$/, '') + "config.js",
     "jquery",
     "leaflet",
     "esri-leaflet",
@@ -9,6 +8,7 @@ define( [
     "modules/d3-cluster-icon",
     "modules/programPopup",
     "modules/programFilters",
+    "modules/downloadCSV",
     "leaflet-marker-cluster",
     "leaflet-locate",
     "leaflet-default-extent",
@@ -22,9 +22,9 @@ define( [
     Geocoding,
     clusterIcon,
     programPopup,
-    programFilters
+    programFilters,
+    downloadCSV
 ) {
-
     var currentTerritory,
       map,
       dataLayer,
@@ -94,37 +94,59 @@ define( [
     {
       currentTerritory = terr;
 
+      $("#spinner").removeClass("hidden");
+
       document.location.hash = "#"+terr;
       $('ul.territories input:not([value="'+terr+'"])').prop("checked",false);
       $('ul.territories input[value="'+terr+'"]:not(:checked)').prop("checked",true);
 
       $('#location-title').html(config.territories[terr].label);
-      dataLayer = esri.featureLayer({url: config.territories[terr].layer});
+
+      var layerUrl = config.territories[terr].layer,
+        featureLimit = 1000,
+        featureOffset = 0;
+
+      dataLayer = esri.featureLayer({url: layerUrl});
       programMarkers = [];
       programsLayer.clearLayers();
       dataLayer.metadata(function(error, metadata){
         dataLayerInfo = metadata;
-        dataLayer.query().where("1=1").run(function(error, featureCollection){
-          $.each(featureCollection.features, function(i, feature) {
-            programMarkers.push(
-              L.marker(
-                [feature.geometry.coordinates[1],feature.geometry.coordinates[0]],
-                {
-                  icon: (icons[feature.properties.program_type] || icons["Other"]),
-                  feature: feature
-                }
-              ).bindPopup(programPopup.bindPopup)
-                .on('popupopen', programPopup.programPopupOpened)
-                .on('popupclose', programPopup.programPopupClosed)
-            );
-          });
-          programsLayer.addLayers(programMarkers);
-          programFilters.loadFilters(dataLayerInfo, programMarkers, programsLayer, map);
+        (function runQuery() {
+          esri.query({url: layerUrl}).limit(featureLimit).offset(featureOffset).run(function(error, featureCollection){
+            featureOffset += featureLimit;
+            $.each(featureCollection.features, function(i, feature) {
+              programMarkers.push(
+                L.marker(
+                  [feature.geometry.coordinates[1],feature.geometry.coordinates[0]],
+                  {
+                    icon: (icons[feature.properties[config.program_types.display.field]] || icons["Other"]),
+                    feature: feature
+                  }
+                ).bindPopup(programPopup.bindPopup)
+                  .on('popupopen', programPopup.popupOpened)
+                  .on('popupclose', programPopup.popupClosed)
+              );
+            });
 
-          defaultExtent.setCenter(programsLayer.getBounds().getCenter());
-          map.once('zoomend', function() { defaultExtent.setZoom(map.getZoom()); });
-          map.fitBounds(programsLayer.getBounds());
-        });
+
+            if (
+              featureCollection.properties &&
+              featureCollection.properties.exceededTransferLimit
+            ) {
+              // If the feature limit was exceeded, keep querying until we get
+              // all records:
+              runQuery();
+            } else {
+              // Once we have all the features, finish setting up the map display:
+              programsLayer.addLayers(programMarkers);
+              programFilters.loadFilters(dataLayerInfo, programMarkers, programsLayer, map, terr);
+              defaultExtent.setCenter(programsLayer.getBounds().getCenter());
+              map.once('zoomend', function() { defaultExtent.setZoom(map.getZoom()); });
+              map.fitBounds(programsLayer.getBounds().pad(0.1));
+              $("#spinner").addClass('hidden');
+            }
+          });
+        })(); // This will execute the runQuery() function immediately after defining it.
       });
     }
 
@@ -132,7 +154,47 @@ define( [
       if (!terr) return;
       terr = terr.toLowerCase();
       if (!config.territories[terr] || terr == currentTerritory) return;
+      $('.calcite-dropdown, .calcite-dropdown-toggle').removeClass('open');
+      $("#menu").data("mmenu").closeAllPanels();
+      $.each(config.filters, function(filter_id, filter){
+        var filterItem = $('.filter-'+filter_id+'-label').closest('li.mm-listitem')
+        if (!filter.territories || filter.territories.indexOf(terr)!=-1) filterItem.removeClass("hidden");
+        else filterItem.addClass("hidden");
+      });
       loadData(terr);
+    }
+
+    function initMenu() {
+      var customFilters = $('li.custom-filters-placeholder');
+      $.each(config.filters, function(filter_id, filter){
+        var filterList = $('ul.filter-'+filter_id);
+        if (filterList.length == 0) // If this hasn't been added to the menu yet, insert a new item before the custom filters placeholder item:
+        {
+          customFilters.before([
+            '<li class="hidden">',
+              '<span><i class="fa '+filter.icon+' fa-fw"></i>&nbsp; <l class="custom-filter-label filter-'+filter_id+'-label">'+filter.name+'</l></span>',
+              '<ul class="filter-'+filter_id+' filter-menu custom-filter">',
+                '<li><span class="loading-label">Loading...</span></li>',
+              '</ul>',
+            '</li>'
+          ].join(''));
+        }
+      });
+
+      $("#menu").mmenu({
+        offCanvas: false,
+        navbar: {
+            title: ""
+        },
+        navbars: [{
+            position: "bottom",
+            content: config.menu_footer_items
+        }]
+      });
+
+      if (config.territory_switch_disabled) {
+        $('.chooseterritory-label').closest('.mm-listitem').addClass('hidden');
+      }
     }
 
     return function() {
@@ -141,6 +203,9 @@ define( [
       $.each(config.text, function(selector, text){
         $(selector).html(text);
       });
+
+      $('.programtypes-label').siblings("i").attr('class', config.program_types.menu_icon);
+      $(".targetgroups-label").siblings("i").attr('class', config.target_groups.menu_icon);
 
       // Add basemaps in config to the basemaps menu...
       var bmMenu = $("ul.basemaps");
@@ -153,6 +218,10 @@ define( [
       });
 
       // Setup the territory menu picker from config...
+      var terrMenuItem = $('.chooseterritory-label').closest('li');
+      if (Object.keys(config.territories).length > 1) terrMenuItem.removeClass('hidden');
+      else terrMenuItem.addClass('hidden'); // Hide the territory picker if only one is available.
+
       var terrMenu = $("ul.territories");
       terrMenu.find("li").remove();
       $.each(config.territories, function(code,opts){
@@ -189,7 +258,7 @@ define( [
 
       defaultExtent = L.control.defaultExtent({
         position: 'topright',
-        title: config.labels.defaultexstent
+        title: config.labels.defaultextent
       }).addTo(map);
 
       if (document.location.protocol == "https:")
@@ -199,7 +268,8 @@ define( [
           strings: {
             title: config.labels.locatetitle,
             popup: config.labels.locatepopup
-          }
+          },
+          icon: 'fa fa-map-marker-alt'
         }).addTo(map);
       }
 
@@ -245,9 +315,15 @@ define( [
 
       attachSearch();
 
-      // Check the current location - if "nwt" is in the URL, then set NWT as
-      // the current territory...otherwise, default to Yukon.
-      loadData(document.location.href.toLowerCase().indexOf("nwt")>-1 ? "nwt" : "yt");
+      initMenu();
+
+      // Load the data for the selected territory, or default to the first
+      // territory specified in the app config.
+      switchTerritory(
+        config.territories[document.location.hash.substr(1)] ?
+        document.location.hash.substr(1) :
+        Object.keys(config.territories)[0]
+      );
 
       $('#map').on('click', '.popup-info', {map: map}, programPopup.showMorePopupInfo);
 
@@ -273,33 +349,32 @@ define( [
         e.preventDefault();
       });
 
-      $("#menu").mmenu({
-          offCanvas: false,
-          navbar: {
-              title: ""
-          },
-          navbars: [{
-              position: "bottom",
-              content: [
-                  '<a class="fa fa-lg fa-envelope" href="//www.aicbr.ca/contact-us/" target="_blank"></a>',
-                  '<a class="fa fa-lg fa-twitter" href="https://twitter.com/AicbrYukon" target="_blank"></a>',
-                  '<a class="fa fa-lg fa-facebook" href="https://www.facebook.com/Arctic-Institute-of-Community-Based-Research-947539015291917/?fref=ts" target="_blank"></a>',
-                  '<a class="fa fa-lg fa-linkedin-square" href="https://www.linkedin.com/company/arctic-institute-of-community-based-research?trk=biz-companies-cym" target="_blank"></a>',
-                  '<a class="fa fa-lg fa-youtube-play" href="https://www.youtube.com/channel/UC0vT-yLsTKZMlX2iBmibEgQ" target="_blank"></a>'
-              ]
-          }]
-      });
-
       $("#menu .about-item").click(function(){
         map.closePopup();
-        programsLayer.unspiderfy();
-        $(".calcite-dropdown.open .dropdown-toggle").click();
+        //programsLayer.unspiderfy();
+        $(".calcite-dropdown.open, .calcite-dropdown-toggle.open").removeClass('open');
         $('#about-modal').modal('show');
+      });
+
+      $("#menu ul.download .complete").click(function(){
+        downloadCSV.downloadMarkersAsCSV(
+          programMarkers,
+          config.territories[currentTerritory].label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_') + ".csv",
+          config.communities.name_field
+        );
+      });
+
+      $("#menu ul.download .filtered").click(function(){
+        downloadCSV.downloadMarkersAsCSV(
+          programFilters.getFilteredMarkers(),
+          config.territories[currentTerritory].label.toLowerCase().replace(/[^a-zA-Z0-9]/g, '_') + "_filtered.csv",
+          config.communities.name_field
+        )
       });
 
       $(window).on('hashchange', function(){
         var hash = document.location.hash;
-        if (!hash || hash == "#") return;
+        if (!hash || !config.territories[hash.substr(1)]) return;
         switchTerritory(hash.substr(1));
       });
     };

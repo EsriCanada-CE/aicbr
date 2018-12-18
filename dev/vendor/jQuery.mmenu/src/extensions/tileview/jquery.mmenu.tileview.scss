@@ -1,22 +1,22 @@
-/*
-	jQuery.mmenu tileview extension CSS
-*/
-
-@import "../../scss/import";
+@import 
+	'../../mixins',
+	'../../variables';
 
 
-.mm-menu
+@if ( $mm_opt_tileview_xs or $mm_opt_tileview_s or $mm_opt_tileview_m or $mm_opt_tileview_l or $mm_opt_tileview_xl )
 {
-	&.mm-tileview .mm-listview,
-	.mm-tileview.mm-listview
+	.mm-menu_tileview,
+	.mm-panel_tileview
 	{
-		@include mm_clearfix;
-
-		> li
+		.mm-listview
 		{
-			width: 50%;
-			height: 0;
-			padding: 50% 0 0 0;
+			margin: 0 !important;
+
+			@include mm_clearfix;
+		}
+		.mm-listitem
+		{
+			padding: 0;
 			float: left;
 			position: relative;
 
@@ -29,70 +29,88 @@
 				z-index: -1;
 			}
 
-			&.mm-tile-xs
+			@if ( $mm_opt_tileview_m )
 			{
-				width: 12.5%;
-				padding-top: 12.5%;
-			}
-			&.mm-tile-s
-			{
-				width: 25%;
-				padding-top: 25%;
-			}
-			&.mm-tile-l
-			{
-				width: 75%;
-				padding-top: 75%;
-			}
-			&.mm-tile-xl
-			{
-				width: 100%;
-				padding-top: 100%;
+				width: 50%;
+				height: 0;
+				padding-top: 50%;
 			}
 
-			> a,
-			> span
+			@if ( $mm_opt_tileview_xs )
 			{
-				line-height: 1px;
-				text-align: center;
-				padding: 50% $mm_padding 0 $mm_padding;
-				margin: 0;
-				position: absolute;
-				top: 0;
-				right: 1px;
-				bottom: 1px;
-				left: 0;
-			}
-			> .mm-next
-			{
-				width: auto;
-
-				&:before,
-				&:after
+				&.mm-tile-xs
 				{
-					content: none;
-					display: none;
+					width: 12.5%;
+					padding-top: 12.5%;
+				}
+			}
+			@if ( $mm_opt_tileview_s )
+			{
+				&.mm-tile-s
+				{
+					width: 25%;
+					padding-top: 25%;
+				}
+			}
+			@if ( $mm_opt_tileview_l )
+			{
+				&.mm-tile-l
+				{
+					width: 75%;
+					padding-top: 75%;
+				}
+			}
+			@if ( $mm_opt_tileview_xl )
+			{
+				&.mm-tile-xl
+				{
+					width: 100%;
+					padding-top: 100%;
 				}
 			}
 		}
-	}
 
-	&.mm-tileview
-	{
-		.mm-panel
+		.mm-listitem__text
 		{
-			padding-left: 0;
-			padding-right: 0;
+			line-height: 1px;
+			text-align: center;
+			padding: 50% $mm_padding 0 $mm_padding;
+			margin: 0;
+			position: absolute;
+			top: 0;
+			right: 1px;
+			bottom: 1px;
+			left: 0;
+		}
+		.mm-listitem__btn
+		{
+			width: auto;
 
+			&:before,
 			&:after
 			{
 				content: none;
 				display: none;
 			}
 		}
-		.mm-listview
+
+		.mm-listitem_divider
 		{
-			margin: 0;
+			display: none;
+		}
+	}
+
+	.mm-menu_tileview .mm-panel,
+	.mm-panel_tileview
+	{
+		padding-left: 0;
+		padding-right: 0;
+
+		&:before,
+		&:after
+		{
+			content: none;
+			display: none;
 		}
 	}
 }

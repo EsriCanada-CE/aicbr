@@ -1,5 +1,1 @@
-/*
- * jQuery Mobile wrapper for jQuery mmenu
- * Include this file after including the jquery.mmenu plugin for default jQuery Mobile support.
- */
-!function(n){var e="mmenu",o=!1;n[e].defaults.onClick.close=!1,n[e].configuration.offCanvas.pageSelector="div.ui-page-active",n(window).load(function(){o=n(".mm-menu").data("mmenu")}),n(window).load(function(){n("body").on("click",".mm-menu a",function(e){e.isDefaultPrevented()||(e.preventDefault(),n("body").pagecontainer("change",this.href))})}),n(window).load(function(){o&&n("body").on("pagecontainerchange",function(n,e){o.close(),o.setPage(e.toPage)})})}(jQuery);
+!function(n){n.mmenu.wrappers.jqueryMobile=function(){var t=this;this.opts.onClick.close=!1,this.conf.offCanvas.page.selector="div.ui-page-active",n("body").on("pagecontainerchange",function(e,n){"function"==typeof t.close&&(t.close(),t.setPage(n.toPage))}),this.bind("initAnchors:after",function(){n("body").on("click",".mm-listview a",function(e){e.isDefaultPrevented()||(e.preventDefault(),n("body").pagecontainer("change",n(this).attr("href")))})})}}(jQuery);

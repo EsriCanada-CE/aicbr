@@ -1,71 +1,28 @@
-/*
-	jQuery.mmenu counters addon CSS
-*/
-
-@import "../../scss/import";
+@import 
+	'../../mixins',
+	'../../variables';
 
 
-em.mm-counter
+@if ( $mm_opt_counters )
 {
-	font: inherit;
-	font-size: $mm_fontSize;
-	font-style: normal;
-	text-indent: 0;
-	line-height: $mm_btnSize / 2;
-	display: block;
-	margin-top: -( $mm_btnSize / 4 );
-	position: absolute;
-	right: $mm_subopenWidth - 5px;
-	top: 50%;
-
-	+ a.mm-next
+	.mm-counter
 	{
-		width: $mm_counterWidth + $mm_subopenWidth;
+		color: $mm_dimmedTextColor;	//	IE11 fallback
+		color: var( --mm-color-text-dimmed );
 
-		+ a,
-		+ span
-		{
-			margin-right: $mm_counterWidth + $mm_subopenWidth;
-		}
+		text-align: right;
+		display: block;
+		min-width: $mm_counterWidth;
+		float: right;
 	}
-	+ a.mm-fullsubopen
-	{
-		padding-left: 0;
 
-		+ a,
-		+ span
+	@if ( $mm_opt_searchfield )
+	{
+		.mm-listitem_nosubitems > .mm-counter
 		{
-			padding-right: $mm_counterWidth + $mm_subopenWidth;
+			display: none;
 		}
 	}
 }
-.mm-listview em.mm-counter + .mm-next.mm-fullsubopen
-{
-	+ a,
-	+ span
-	{
-		padding-right: $mm_counterWidth + $mm_subopenWidth;
-	}
-}
 
-//	Counters in vertical submenus
-.mm-vertical
-{
-	> .mm-counter
-	{
-		top: ( $mm_btnSize / 4 ) + 2;
-		margin-top: 0;
-	}
-	&.mm-spacer > .mm-counter
-	{
-		margin-top: $mm_btnSize;
-	}
-}
-
-// Search
-.mm-nosubresults > .mm-counter
-{
-	display: none;
-}
-
-@include mm_colors_counters;
+@import 'counters.rtl';

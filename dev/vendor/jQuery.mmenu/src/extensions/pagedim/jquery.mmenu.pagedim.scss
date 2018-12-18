@@ -1,38 +1,49 @@
-/*
-	jQuery.mmenu pageDim extension CSS
-*/
-
-@import "../../scss/import";
+@import 
+	'../../mixins',
+	'../../variables';
 
 
-.mm-menu.mm-opened[class*="mm-pagedim"]
+@if ( $mm_opt_pagedim_default or $mm_opt_pagedim_black or $mm_opt_pagedim_white )
 {
-	~ #mm-blocker
+	[class*="mm-menu_pagedim"].mm-menu_opened
 	{
-		opacity: 0;
+		~ .mm-wrapper__blocker
+		{
+			opacity: 0;
+		}
 	}
-}
 
-html.mm-opening .mm-menu.mm-opened[class*="mm-pagedim"]
-{
-	~ #mm-blocker
+	.mm-wrapper_opening [class*="mm-menu_pagedim"].mm-menu_opened
 	{
-		opacity: $mm_pagedimOpacity;
-		transition: opacity $mm_transitionDuration $mm_transitionFunction $mm_transitionDuration;
+		~ .mm-wrapper__blocker
+		{
+			opacity: $mm_pagedimOpacity;
+			transition: opacity $mm_transitionDuration $mm_transitionFunction $mm_transitionDuration;
+		}
 	}
-}
-.mm-menu.mm-opened
-{
-	&.mm-pagedim ~ #mm-blocker
+
+	.mm-menu_opened
 	{
-		background: inherit;
-	}
-	&.mm-pagedim-white ~ #mm-blocker
-	{
-		background: #fff;
-	}
-	&.mm-pagedim-black ~ #mm-blocker
-	{
-		background: #000;
+		@if ( $mm_opt_pagedim_default )
+		{
+			&.mm-menu_pagedim ~ .mm-wrapper__blocker
+			{
+				background: inherit;
+			}
+		}
+		@if ( $mm_opt_pagedim_black )
+		{
+			&.mm-menu_pagedim-black ~ .mm-wrapper__blocker
+			{
+				background: #000;
+			}
+		}
+		@if ( $mm_opt_pagedim_white )
+		{
+			&.mm-menu_pagedim-white ~ .mm-wrapper__blocker
+			{
+				background: #fff;
+			}
+		}
 	}
 }

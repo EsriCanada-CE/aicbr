@@ -32,6 +32,7 @@ export var ArcgisOnlineProvider = GeocodeService.extend({
           if (!suggestion.isCollection) {
             suggestions.push({
               text: suggestion.text,
+              unformattedText: suggestion.text,
               magicKey: suggestion.magicKey
             });
           }
@@ -56,6 +57,14 @@ export var ArcgisOnlineProvider = GeocodeService.extend({
 
     if (this.options.forStorage) {
       request.forStorage(true);
+    }
+
+    if (this.options.countries) {
+      request.countries(this.options.countries);
+    }
+
+    if (this.options.categories) {
+      request.category(this.options.categories);
     }
 
     return request.run(function (error, response) {

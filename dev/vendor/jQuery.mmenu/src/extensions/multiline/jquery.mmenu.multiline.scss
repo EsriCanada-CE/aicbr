@@ -1,18 +1,17 @@
-/*
-	jQuery.mmenu multiline extension CSS
-*/
-
-@import "../../scss/import";
+@import 
+	'../../mixins',
+	'../../variables';
 
 
-.mm-menu.mm-multiline .mm-listview > li,
-.mm-menu .mm-listview.mm-multiline > li,
-.mm-menu .mm-listview > li.mm-multiline
+@if ( $mm_opt_multiline )
 {
-	> a,
-	> span
+	.mm-menu_multiline,
+	.mm-panel_multiline
 	{
-		text-overflow: clip;
-		white-space: normal;
+		.mm-listitem__text
+		{
+			text-overflow: clip;
+			white-space: normal;
+		}
 	}
 }

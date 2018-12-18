@@ -1,57 +1,47 @@
-/*	
- * jQuery Mobile wrapper for jQuery mmenu
- * Include this file after including the jquery.mmenu plugin for default jQuery Mobile support.
- */
-
-
 (function( $ ) {
 
-	var _PLUGIN_ = 'mmenu';
+	const _PLUGIN_ = 'mmenu';
+	const _WRAPPR_ = 'jqueryMobile';
 
-	//	Vars
-	var api: any = false;
 
-	//	Set some defaults
-	$[ _PLUGIN_ ].defaults.onClick.close = false;
+	$[ _PLUGIN_ ].wrappers[ _WRAPPR_ ] = function()
+	{
+		var that = this;
 
-	//	Set current page
-	$[ _PLUGIN_ ].configuration.offCanvas.pageSelector = 'div.ui-page-active';
+		this.opts.onClick.close = false;
+		this.conf.offCanvas.page.selector = 'div.ui-page-active';
 
-	//	Get api
-	$(window).load(function() {
-		api = $('.mm-menu').data( 'mmenu' );
-	});
-
-	//	Change pages
-	$(window).load(function() {
+		//	When changing pages
 		$('body').on(
-			'click',
-			'.mm-menu a',
-			function( e )
+			'pagecontainerchange',
+			function( e, args )
 			{
-				if ( !e.isDefaultPrevented() )
+				if ( typeof that.close == 'function' )
 				{
-					e.preventDefault();
-					$( 'body' ).pagecontainer( 'change', this.href );
+					that.close();
+					that.setPage( args.toPage );
 				}
 			}
 		);
-	});
 
-	//	When changing pages
-	$(window).load(function() {
-		if ( api )
-		{
-			$('body').on(
-				'pagecontainerchange',
-				function( e, args )
-				{
-					api.close();
-					api.setPage( args.toPage );
-				}
-			);
-		}
-	});
-
+		//	Change pages
+		this.bind( 'initAnchors:after',
+			function()
+			{
+				$('body').on(
+					'click',
+					'.mm-listview a',
+					function( e )
+					{
+						if ( !e.isDefaultPrevented() )
+						{
+							e.preventDefault();
+							$( 'body' )[ 'pagecontainer' ]( 'change', $(this).attr( 'href' ) );
+						}
+					}
+				);
+			}
+		);
+	};
 
 })( jQuery );

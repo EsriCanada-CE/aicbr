@@ -4,7 +4,7 @@
 
 define(
   [
-    "config",
+    document.location.href.replace(/[^\/]*$/, '') + "config.js",
     "d3",
     "jquery",
     "leaflet"
@@ -120,9 +120,10 @@ define(
         iconDim = (r + strokeWidth) * 2, //...and divIcon dimensions (leaflet really wants to know the size)
         data = d3.nest() // Build a dataset for the pie chart
           .key(function(d) {
-            return d.options.feature.properties.program_type;
+            return d.options.feature.properties[config.program_types.display.field];
           })
           .entries(children, d3.map),
+        defaultPieConfig = config.program_types.display.types[config.program_types.display.default_type];
         // bake some svg markup
         html = _bakeThePie({
           data: data,
@@ -136,10 +137,10 @@ define(
           pieLabel: n,
           pieLabelClass: 'marker-cluster-pie-label',
           pieFilling: function(d) {
-            return config.program_types.display.types[d.data.key].pie.filling;
+            return (config.program_types.display.types[d.data.key] || defaultPieConfig).pie.filling;
           },
           pieCrust: function(d) {
-            return config.program_types.display.types[d.data.key].pie.crust;
+            return (config.program_types.display.types[d.data.key] || defaultPieConfig).pie.crust;
           },
           pathTitleFunc: function(d) {
             return d.data.key + ' (' + d.data.values.length + ' Program' + (d.data.values.length !== 1 ? 's' : '') + ')';

@@ -1,7 +1,11 @@
 define([
-  "config", "jquery", "leaflet"
+  document.location.href.replace(/[^\/]*$/, '') + "config.js",
+  "jquery",
+  "leaflet"
 ], function (
-  config, $, L
+  config,
+  $,
+  L
 ) {
 
   // Sorts an array of objects with an 'order' property.
@@ -46,9 +50,13 @@ define([
         if (prop.toLowerCase()=="yes") {
           label = targetGroup.label;
         }
-        targetEveryone = targetEveryone && arrayContainsLCString(["na","n/a","yes"], prop.toLowerCase());
+        targetEveryone = (
+          config.target_groups.everyone_label &&
+          targetEveryone &&
+          arrayContainsLCString(["na","n/a","yes"], prop.toLowerCase())
+        );
       }
-      if (label && targetGroup.fieldname == "tg_other" && props[config.target_groups.explain_other_field])
+      if (label && targetGroup.fieldname == config.target_groups.other_field && props[config.target_groups.explain_other_field])
       {
         label = label + " <em>(" + props[config.target_groups.explain_other_field] + ")</em>";
       }
@@ -64,21 +72,9 @@ define([
     return labels;
   }
 
-  // Returns a label with Yes, or No/Unkown + any value for 'why_not' in
-  // italicized brackets...
-  function getContinuingLabel(props)
-  {
-    var continuing = props.continuing;
-    if (continuing && arrayContainsLCString(["no","unknown"], continuing) && props.why_not)
-    {
-      continuing = continuing + " <em>(" + props.why_not + ")</em>";
-    }
-    return continuing;
-  }
-
   // Saves me having to repeat toLowerCase() and indexOf() methods all over the place...
   function arrayContainsLCString(array, string) {
-    if (string) return array.indexOf(string.toLowerCase())!=-1;
+    if (string) return array.indexOf(string.toString().toLowerCase())!=-1;
     return false;
   }
 
@@ -90,92 +86,105 @@ define([
       props = marker.options.feature.properties;
 
     var ptLabels = getProgramTypesLabels(props),
-      tgLabels = getTargetGroupsLabels(props),
-      continuingLabel = getContinuingLabel(props),
-      community = props.community,
-      contact_name = props.contact_name,
-      contact_email = props.contact_email,
-      contact_tel = props.contact_tel,
-      contact_website = props.contact_website,
-      contact_org = props.contact_org,
-      program = props.program,
-      host = props.host,
-      location = props.location,
-      description = props.description,
-      time_frame = props.time_frame,
-      season = props.season,
-      cost = props.cost,
-      volunteer_run = props.volunteer_run,
-      duration = props.duration,
-      funding = props.funding,
-      partners = props.partners,
-      success_factors = props.success_factors;
+      tgLabels = getTargetGroupsLabels(props);
 
-
-    body.push('<h2 class="popup-title">' + program + '</h2>');
+    body.push('<h2 class="popup-title">' + props[config.popup.title_field] + '</h2>');
     body.push('<div class="popup-body">');
 
-    if (host && !arrayContainsLCString(naStrings, host))
-      body.push('<p><i class="fa fa-user fa-fw"></i>' + host + '</p>');
-
-    if (community && !arrayContainsLCString(naStrings, community))
-      body.push("<p><i class='fa fa-home fa-fw'></i>" + community + '</p>');
-
-    if (ptLabels.length > 0)
-    {
-      // Append a UL elemment with an LI for each program type (an 'extra-hint'
-      // LI that contains a link to the full modal popup, and 'extra-item' LI
-      // elements that are hidden in the in-map popup are added if there are
-      // over three items)
-      if (ptLabels.length <= 3)
+    $.each(config.popup.parts, function(i, part){
+      var htmlPart = false;
+      if (part.fieldname) // If it's just a fieldname, then construct the part
       {
-        body.push('<p><i class="fa fa-list fa-fw"></i><b>' + (ptLabels.length > 1 ? config.labels.programtypes : config.labels.programtype) + ":</b></p><ul><li>" + ptLabels.join("</li><li>") + '</li></ul>');
-      } else {
-        body.push('<p><i class="fa fa-list fa-fw"></i><b>' + (ptLabels.length > 1 ? config.labels.programtypes : config.labels.programtype) + ":</b></p><ul><li>" + ptLabels.slice(0,2).join("</li><li>") + '</li><li class="extra-hint"><a class="popup-info"> '+L.Util.template(config.labels.morelink,{n:(ptLabels.length-2)})+'</a></li><li class="extra-item">'+ ptLabels.slice(2).join('</li><li class="extra-item">')+'</li></ul>');
-      }
-    }
+        if (!part.depends_on_field || (
+          // if the field depends on another field, then check that the other
+          // field has a valid value:
+          props[part.depends_on_field] &&
+          !arrayContainsLCString(naStrings, props[part.depends_on_field])
+        )) {
+          var value = props[part.fieldname];
+          if (value && !arrayContainsLCString(naStrings, value))
+          {
 
-    if (tgLabels.length > 0)
-    {
-      // Append a UL elemment with an LI for each target group (an 'extra-hint'
-      // LI that contains a link to the full modal popup, and 'extra-item' LI
-      // elements that are hidden in the in-map popup are added if there are
-      // over three items)
-      if (tgLabels.length <= 3)
+            htmlPart = "<p" + (
+              part.class_name ? ' class="'+part.class_name + '"' : ''
+            ) + '>';
+
+            if (part.icon) htmlPart += '<i class="' + part.icon + '"></i> ';
+
+            if (part.label) htmlPart += '<b>' + part.label + ':</b> ';
+
+            htmlPart += value;
+
+            htmlPart += "</p>";
+
+            if (part.add_separator) htmlPart += '<hr />';
+          }
+        }
+      }
+
+      // If the part is meant to display the list of program types (or equvialent):
+      else if (part.program_types && ptLabels.length > 0) {
+        // Append a UL elemment with an LI for each program type (an 'extra-hint'
+        // LI that contains a link to the full modal popup, and 'extra-item' LI
+        // elements that are hidden in the in-map popup are added if there are
+        // over three items)
+        if (ptLabels.length <= 3)
+        {
+          htmlPart = '<p><i class="fa fa-list fa-fw"></i> <b>' +
+            (ptLabels.length > 1 ? config.labels.programtypes : config.labels.programtype) +
+            ":</b></p><ul><li>" + ptLabels.join("</li><li>") +
+            '</li></ul>';
+        } else {
+          htmlPart = '<p><i class="fa fa-list fa-fw"></i> <b>' +
+            (ptLabels.length > 1 ? config.labels.programtypes : config.labels.programtype) +
+            ":</b></p><ul><li>" + ptLabels.slice(0,2).join("</li><li>") +
+            '</li><li class="extra-hint"><a class="popup-info"> ' +
+            L.Util.template(config.labels.morelink,{n:(ptLabels.length-2)}) +
+            '</a></li><li class="extra-item">'+
+            ptLabels.slice(2).join('</li><li class="extra-item">') +
+            '</li></ul>';
+        }
+      }
+
+      // If the part is meant to display the target groups (or equivalent):
+      else if (part.target_groups && tgLabels.length > 0)
       {
-        body.push('<p><i class="fa fa-users fa-fw"></i><b>' + (tgLabels.length > 1 ? config.labels.targetgroups : config.labels.targetgroups) + ":</b></p><ul><li>" + tgLabels.join("</li><li>") + '</li></ul>');
-      } else {
-        body.push('<p><i class="fa fa-users fa-fw"></i><b>' + (tgLabels.length > 1 ? config.labels.targetgroups : config.labels.targetgroups) + ":</b></p><ul><li>" + tgLabels.slice(0,2).join("</li><li>") + '</li><li class="extra-hint"><a class="popup-info"> '+L.Util.template(config.labels.morelink,{n:(tgLabels.length-2)})+'</a></li><li class="extra-item">'+ tgLabels.slice(2).join('</li><li class="extra-item">')+'</li></ul>');
+        // Append a UL elemment with an LI for each target group (an 'extra-hint'
+        // LI that contains a link to the full modal popup, and 'extra-item' LI
+        // elements that are hidden in the in-map popup are added if there are
+        // over three items)
+        if (tgLabels.length <= 3)
+        {
+          htmlPart = '<p><i class="fa fa-users fa-fw"></i> <b>' +
+            (tgLabels.length > 1 ? config.labels.targetgroups : config.labels.targetgroups) +
+            ":</b></p><ul><li>" + tgLabels.join("</li><li>") + '</li></ul>';
+        } else {
+          htmlPart = '<p><i class="fa fa-users fa-fw"></i> <b>' +
+            (tgLabels.length > 1 ? config.labels.targetgroups : config.labels.targetgroups) +
+            ":</b></p><ul><li>" + tgLabels.slice(0,2).join("</li><li>") +
+            '</li><li class="extra-hint"><a class="popup-info"> ' +
+            L.Util.template(config.labels.morelink,{n:(tgLabels.length-2)}) +
+            '</a></li><li class="extra-item">' +
+            tgLabels.slice(2).join('</li><li class="extra-item">') +
+            '</li></ul>';
+        }
       }
-    }
 
-    if (season && !arrayContainsLCString(naStrings, season))
-      body.push('<p><i class="fa fa-calendar fa-fw"></i>' + season + '</p>');
-
-    if (time_frame && !arrayContainsLCString(naStrings, time_frame))
-      body.push('<p><i class="fa fa-clock-o fa-fw"></i>' + time_frame + '</p>');
-
-    // Add the description to the
-    if (description && !arrayContainsLCString(naStrings, description))
-      body.push('<p class="description">' + description + '</p>');
-
-    // Setup 'more info'...
-    if (continuingLabel && !arrayContainsLCString(naStrings, continuingLabel))
-      moreInfo.push("<p><b>" + config.display_fields.continuing + ":</b> " + continuingLabel + "</p>");
-
-    if (duration && !arrayContainsLCString(naStrings, duration))
-      moreInfo.push("<p><b>" + config.display_fields.duration + ":</b> " + duration + "</p>");
-
-    if (funding && !arrayContainsLCString(naStrings, funding))
-      moreInfo.push("<p><b>" + config.display_fields.funding + ":</b> " + funding + "</p>");
-
-    if (partners && !arrayContainsLCString(naStrings, partners))
-      moreInfo.push("<p><b>" + config.display_fields.partners + ":</b> " + partners + "</p>");
-
-    if (success_factors && !arrayContainsLCString(naStrings, success_factors))
-      moreInfo.push("<p><b>" + config.display_fields.success_factors + ":</b> " + success_factors + "</p>");
+      // if the HTML part is not false/blank, push it into either the body, or
+      // the more_info array, as indicated in the part config:
+      if (htmlPart) {
+        if (!part.more_info) body.push(htmlPart);
+        else moreInfo.push(htmlPart);
+      }
+    });
 
     var contactInfo = [];
+
+    var contact_name = props[config.popup.contact_info.contact_name_field];
+    var contact_org = props[config.popup.contact_info.contact_org_field];
+    var contact_tel = props[config.popup.contact_info.contact_tel_field];
+    var contact_email = props[config.popup.contact_info.contact_email_field];
+    var contact_website = props[config.popup.contact_info.contact_website_field];
 
     if (contact_name && !arrayContainsLCString(naStrings, contact_name))
     {
@@ -188,9 +197,6 @@ define([
       if (contact_org && !arrayContainsLCString(naStrings, contact_org))
         contactInfo.push("<p><em>" + contact_org + "</em></p>");
     }
-
-    if (location && !arrayContainsLCString(naStrings, location))
-      contactInfo.push('<p><i class="fa fa-location-arrow fa-fw"></i>' + location + "</p>");
 
     if (contact_tel && !arrayContainsLCString(naStrings, contact_tel))
       contactInfo.push('<p><i class="fa fa-phone fa-fw"></i>' + contact_tel + "</p>");
@@ -210,26 +216,37 @@ define([
       // Merge all details into the moreInfo array, and add an
       // 'additional details' header if there is more than the just
       // contact info included...
-      moreInfo = body.slice(2).concat((moreInfo.length > (contactInfo.length+1) ? ['<h3 class="program-details">'+config.labels.additionaldetails+' </h3>'] : []).concat(moreInfo));
+      moreInfo = body.slice(2).concat(
+        (
+          moreInfo.length > (contactInfo.length+1) ?
+          ['<h3 class="program-details">'+config.labels.additionaldetails+' </h3>'] :
+          []
+        ).concat(
+          moreInfo
+        ));
       body.push('<p class="popup-info"><a class="popup-info">'+config.labels.moreinfo+'</a></p>');
     }
 
+    // Add the closing tag for the popup content:
     body.push("</div>");
 
-    $("#program-modal .modal-title").html(program);
+    // Update the modal dialog - this is what is displayed if someone clicks
+    // one of the links in the popup to show more detail:
+    $("#program-modal .modal-title").html(props[config.popup.title_field]);
     $("#program-modal .modal-body").html("<div>"+moreInfo.join("")+"</div>");
 
+    // Return the body HTML elements concatenated into a single string:
     return body.join("");
   }
 
   var currentPopupMarker = false;
-  function programPopupOpened(marker)
+  function popupOpened(marker)
   {
     currentPopupMarker = marker;
     centreOnPopup();
   }
 
-  function programPopupClosed(marker)
+  function popupClosed(marker)
   {
     currentPopupMarker = false;
   }
@@ -259,8 +276,8 @@ define([
 
   return {
     bindPopup: bindPopup,
-    programPopupOpened: programPopupOpened,
-    programPopupClosed: programPopupClosed,
+    popupOpened: popupOpened,
+    popupClosed: popupClosed,
     showMorePopupInfo: showMorePopupInfo
   }
 });

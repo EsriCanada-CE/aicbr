@@ -1,3 +1,11 @@
+/*!
+ * Leaflet.extra-markers
+ * Custom Markers for Leaflet JS based on Awesome Markers
+ * Leaflet ExtraMarkers
+ * https://github.com/coryasilva/Leaflet.ExtraMarkers/
+ * @author coryasilva <https://github.com/coryasilva>
+ * @version 1.0.6
+ */
 /* Marker setup */
 .extra-marker {
   background: url("../img/markers_default.png") no-repeat 0 0;

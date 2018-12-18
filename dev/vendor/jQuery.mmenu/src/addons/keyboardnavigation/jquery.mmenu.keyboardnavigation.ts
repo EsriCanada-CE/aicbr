@@ -1,14 +1,7 @@
-/*	
- * jQuery mmenu keyboardNavigation add-on
- * mmenu.frebsite.nl
- *
- * Copyright (c) Fred Heusschen
- */
-
 (function( $ ) {
 
-	var _PLUGIN_ = 'mmenu',
-		_ADDON_  = 'keyboardNavigation';
+	const _PLUGIN_ = 'mmenu';
+	const _ADDON_  = 'keyboardNavigation';
 
 
 	$[ _PLUGIN_ ].addons[ _ADDON_ ] = {
@@ -16,6 +9,13 @@
 		//	setup: fired once per menu
 		setup: function()
 		{
+			//	Keyboard navigation on touchscreens opens the virtual keyboard :/
+			if ( $[ _PLUGIN_ ].support.touch )
+			{
+				return;
+			}
+
+
 			var that = this,
 				opts = this.opts[ _ADDON_ ],
 				conf = this.conf[ _ADDON_ ];
@@ -41,15 +41,17 @@
 			if ( opts.enable )
 			{
 
-				var $start = $('<button class="' + _c.tabstart + '" tabindex="0" type="button" />'),
-					$end   = $('<button class="' + _c.tabend   + '" tabindex="0" type="button" />');
+				var $menuStart 	= $('<button class="' + _c.tabstart + '" />'),
+					$menuEnd   	= $('<button class="' + _c.tabend   + '" />');
+
+				var $blckEnd 	= $('<button class="' + _c.tabend   + '" />');
 
 				this.bind( 'initMenu:after',
 					function()
 					{
 						if ( opts.enhance )
 						{
-							this.$menu.addClass( _c.keyboardfocus );
+							this.$menu.addClass( _c.menu + '_keyboardfocus' );
 						}
 
 						this[ '_initWindow_' + _ADDON_ ]( opts.enhance );
@@ -59,30 +61,28 @@
 					function()
 					{
 						this.$menu
-							.prepend( $start )
-							.append( $end )
+							.prepend( $menuStart )
+							.append( $menuEnd )
 							.children( '.' + _c.mm( 'navbars-top' ) + ', .' + _c.mm( 'navbars-bottom' )  )
 							.children( '.' + _c.navbar )
 							.children( 'a.' + _c.title )
 							.attr( 'tabindex', -1 );
 					}
 				);
-				this.bind( 'open:start',
+				this.bind( 'initBlocker:after',
 					function()
 					{
-						tabindex.call( this );
+						glbl.$blck
+							.append( $blckEnd )
+							.children( 'a' )
+							.addClass( _c.tabstart );
 					}
 				);
+
 				this.bind( 'open:finish',
 					function()
 					{
 						focus.call( this, null, opts.enable );
-					}
-				);
-				this.bind( 'openPanel:start',
-					function( $panl )
-					{
-						tabindex.call( this, $panl );
 					}
 				);
 				this.bind( 'openPanel:finish',
@@ -94,10 +94,14 @@
 
 
 				//	Add screenreader / aria support
-				this.bind( 'initOpened:after',
+				this.bind( 'initOpened:after:sr-aria',
 					function()
 					{
-						this.__sr_aria( this.$menu.children( '.' + _c.mm( 'tabstart' ) + ', .' + _c.mm( 'tabend' ) ), 'hidden', true );
+						var $btns = this.$menu.add( glbl.$blck )
+							.children( '.' + _c.tabstart + ', .' + _c.tabend );
+
+						this.__sr_aria( $btns, 'hidden', true );
+						this.__sr_role( $btns, 'presentation' );
 					}
 				);
 			}
@@ -110,7 +114,7 @@
 			_d = $[ _PLUGIN_ ]._d;
 			_e = $[ _PLUGIN_ ]._e;
 
-			_c.add( 'tabstart tabend keyboardfocus' );
+			_c.add( 'tabstart tabend' );
 			_e.add( 'focusin keydown' );
 		},
 
@@ -141,13 +145,34 @@
 			.on( _e.focusin + '-' + _ADDON_,
 				function( e ) 
 				{
-					if ( glbl.$html.hasClass( _c.opened ) )
+					if ( glbl.$html.hasClass( _c.wrapper + '_opened' ) )
 					{
 						var $t = $(e.target);
 
 						if ( $t.is( '.' + _c.tabend ) )
 						{
-							$t.parent().find( '.' + _c.tabstart ).focus();
+							var $target = $();
+
+							//	Jump from menu to blocker
+							if ( $t.parent().is( '.' + _c.menu ) )
+							{
+								if ( glbl.$blck )
+								{
+									$target = glbl.$blck;
+								}
+							}
+							if ( $t.parent().is( '.' + _c.wrapper + '__blocker' ) )
+							{
+								$target = glbl.$body
+									.find( '.' + _c.menu + '_offcanvas' )
+									.filter( '.' + _c.menu + '_opened' );
+							}
+							if ( !$target.length )
+							{
+								$target = $t.parent();
+							}
+
+							$target.children( '.' + _c.tabstart ).focus();
 						}
 					}
 				}
@@ -213,7 +238,7 @@
 							var api = $m.data( 'mmenu' );
 
 							//	special case for input and textarea
-							if ( $t.is( 'input, textarea' ) )
+							if ( $t.is( 'input' ) )
 							{
 								switch( e.keyCode )
 								{
@@ -229,7 +254,7 @@
 								{
 									//	close submenu with backspace
 									case 8: 
-										var $p = $t.closest( '.' + _c.panel ).data( _d.parent );
+										var $p = $m.find( '.' + _c.panel + '_opened' ).data( _d.parent );
 										if ( $p && $p.length )
 										{
 											api.openPanel( $p.closest( '.' + _c.panel ) );
@@ -238,7 +263,7 @@
 
 									//	close menu with esc
 									case 27:
-										if ( $m.hasClass( _c.offcanvas ) )
+										if ( $m.hasClass( _c.menu + '_offcanvas' ) )
 										{
 											api.close();
 										}
@@ -257,11 +282,11 @@
 
 	function focus( $panl, enable )
 	{
-		$panl = $panl || this.$pnls.children( '.' + _c.opened );
+		$panl = $panl || this.$pnls.children( '.' + _c.panel + '_opened' );
 
 		var $focs = $(),
 			$navb = this.$menu
-				.children( '.' + _c.mm( 'navbars-top' ) + ', .' + _c.mm( 'navbars-bottom' )  )
+				.children( '.' + _c.mm( 'navbars_top' ) + ', .' + _c.mm( 'navbars_bottom' )  )
 				.children( '.' + _c.navbar );
 
 		//	already focus in navbar
@@ -281,7 +306,7 @@
 				$focs = $panl.find( focs ).not( '.' + _c.hidden );
 			}
 
-			//	first anchor in navbar
+			//	first element in navbar
 			if ( !$focs.length )
 			{
 				$focs = $navb
@@ -297,23 +322,6 @@
 		}
 
 		$focs.first().focus();
-	}
-	function tabindex( $panl )
-	{
-		if ( !$panl )
-		{
-			$panl = this.$pnls.children( '.' + _c.opened );
-		}
-
-		var $pnls = this.$pnls.children( '.' + _c.panel ),
-			$hidn = $pnls.not( $panl );
-
-		$hidn.find( focs ).attr( 'tabindex', -1 );
-		$panl.find( focs ).attr( 'tabindex', 0 );
-
-		//	_c.toggle will result in an empty string if the toggle addon is not loaded
-		$panl.find( '.' + _c.mm( 'toggle' ) + ', .' + _c.mm( 'check' ) ).attr( 'tabindex', -1 );
-		$panl.children( '.' + _c.navbar ).children( '.' + _c.title ).attr( 'tabindex', -1 );
 	}
 
 })( jQuery );

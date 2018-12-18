@@ -22,6 +22,5 @@
   },
   "_source": "https://github.com/Esri/esri-leaflet-clustered-feature-layer.git",
   "_target": "^2.0.0",
-  "_originalSource": "esri-leaflet-clustered-feature-layer",
-  "_direct": true
+  "_originalSource": "esri-leaflet-clustered-feature-layer"
 }

@@ -1,6 +1,6 @@
-import { Util, setOptions } from 'leaflet';
+import { Util } from 'leaflet';
 import featureLayerService from '../../Services/FeatureLayerService';
-import { cleanUrl, warn, setEsriAttribution } from '../../Util';
+import { getUrlParams, warn, setEsriAttribution } from '../../Util';
 import VirtualGrid from 'leaflet-virtual-grid';
 import BinarySearchIndex from 'tiny-binary-search';
 
@@ -28,8 +28,8 @@ export var FeatureManager = VirtualGrid.extend({
   initialize: function (options) {
     VirtualGrid.prototype.initialize.call(this, options);
 
-    options.url = cleanUrl(options.url);
-    options = setOptions(this, options);
+    options = getUrlParams(options);
+    options = Util.setOptions(this, options);
 
     this.service = featureLayerService(options);
     this.service.addEventParent(this);
@@ -80,6 +80,10 @@ export var FeatureManager = VirtualGrid.extend({
         // Unless we've been told otherwise, check to see whether service can emit GeoJSON natively
         if (!forceJsonFormat && supportedFormats && supportedFormats.indexOf('geoJSON') !== -1) {
           this.service.options.isModern = true;
+        }
+
+        if (metadata.objectIdField) {
+          this.service.options.idAttribute = metadata.objectIdField;
         }
 
         // add copyright text listed in service metadata
@@ -200,6 +204,10 @@ export var FeatureManager = VirtualGrid.extend({
       .fields(this.options.fields)
       .precision(this.options.precision);
 
+    if (this.options.requestParams) {
+      Util.extend(query.params, this.options.requestParams);
+    }
+
     if (this.options.simplifyFactor) {
       query.simplify(this._map, this.options.simplifyFactor);
     }
@@ -235,7 +243,7 @@ export var FeatureManager = VirtualGrid.extend({
 
       pendingRequests--;
 
-      if (pendingRequests <= 0) {
+      if (pendingRequests <= 0 && this._visibleZoom()) {
         this._currentSnapshot = newSnapshot;
         // schedule adding features for the next animation frame
         Util.requestAnimFrame(Util.bind(function () {
@@ -480,20 +488,27 @@ export var FeatureManager = VirtualGrid.extend({
   },
 
   addFeature: function (feature, callback, context) {
+    this.addFeatures(feature, callback, context);
+  },
+
+  addFeatures: function (features, callback, context) {
     this._getMetadata(Util.bind(function (error, metadata) {
       if (error) {
         if (callback) { callback.call(this, error, null); }
         return;
       }
+      // GeoJSON featureCollection or simple feature
+      var featuresArray = features.features ? features.features : [features];
 
-      this.service.addFeature(feature, Util.bind(function (error, response) {
+      this.service.addFeatures(features, Util.bind(function (error, response) {
         if (!error) {
-          // assign ID from result to appropriate objectid field from service metadata
-          feature.properties[metadata.objectIdField] = response.objectId;
-
-          // we also need to update the geojson id for createLayers() to function
-          feature.id = response.objectId;
-          this.createLayers([feature]);
+          for (var i = featuresArray.length - 1; i >= 0; i--) {
+            // assign ID from result to appropriate objectid field from service metadata
+            featuresArray[i].properties[metadata.objectIdField] = featuresArray.length > 1 ? response[i].objectId : response.objectId;
+            // we also need to update the geojson id for createLayers() to function
+            featuresArray[i].id = featuresArray.length > 1 ? response[i].objectId : response.objectId;
+          }
+          this.createLayers(featuresArray);
         }
 
         if (callback) {
@@ -504,10 +519,18 @@ export var FeatureManager = VirtualGrid.extend({
   },
 
   updateFeature: function (feature, callback, context) {
-    this.service.updateFeature(feature, function (error, response) {
+    this.updateFeatures(feature, callback, context);
+  },
+
+  updateFeatures: function (features, callback, context) {
+    // GeoJSON featureCollection or simple feature
+    var featuresArray = features.features ? features.features : [features];
+    this.service.updateFeatures(features, function (error, response) {
       if (!error) {
-        this.removeLayers([feature.id], true);
-        this.createLayers([feature]);
+        for (var i = featuresArray.length - 1; i >= 0; i--) {
+          this.removeLayers([featuresArray[i].id], true);
+        }
+        this.createLayers(featuresArray);
       }
 
       if (callback) {
@@ -517,21 +540,15 @@ export var FeatureManager = VirtualGrid.extend({
   },
 
   deleteFeature: function (id, callback, context) {
-    this.service.deleteFeature(id, function (error, response) {
-      if (!error && response.objectId) {
-        this.removeLayers([response.objectId], true);
-      }
-      if (callback) {
-        callback.call(context, error, response);
-      }
-    }, this);
+    this.deleteFeatures(id, callback, context);
   },
 
   deleteFeatures: function (ids, callback, context) {
     return this.service.deleteFeatures(ids, function (error, response) {
-      if (!error && response.length > 0) {
-        for (var i = 0; i < response.length; i++) {
-          this.removeLayers([response[i].objectId], true);
+      var responseArray = response.length ? response : [response];
+      if (!error && responseArray.length > 0) {
+        for (var i = responseArray.length - 1; i >= 0; i--) {
+          this.removeLayers([responseArray[i].objectId], true);
         }
       }
       if (callback) {

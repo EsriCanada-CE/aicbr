@@ -1,14 +1,7 @@
-/*
- * jQuery mmenu screenReader add-on
- * mmenu.frebsite.nl
- *
- * Copyright (c) Fred Heusschen
- */
-
 (function( $ ) {
 
-	var _PLUGIN_ = 'mmenu',
-		_ADDON_  = 'screenReader';
+	const _PLUGIN_ = 'mmenu';
+	const _ADDON_  = 'screenReader';
 
 
 	$[ _PLUGIN_ ].addons[ _ADDON_ ] = {
@@ -54,7 +47,7 @@
 						this.bind( 'close:start'		, function() { this.trigger( 'close:start:sr-aria' 		) });
 						this.bind( 'close:finish'		, function() { this.trigger( 'close:finish:sr-aria' 	) });
 						this.bind( 'open:start'			, function() { this.trigger( 'open:start:sr-aria' 		) });
-						this.bind( 'open:finish'		, function() { this.trigger( 'open:finish:sr-aria' 		) });
+						this.bind( 'initOpened:after'	, function() { this.trigger( 'initOpened:after:sr-aria'	) });
 					}
 				);
 
@@ -87,7 +80,7 @@
 
 						var $shown = $panel.add(
 							$panel
-								.find( '.' + _c.vertical + '.' + _c.opened )
+								.find( '.' + _c.listitem + '_vertical .' + _c.listitem + '_opened' )
 								.children( '.' + _c.panel )
 						);
 
@@ -108,7 +101,7 @@
 					function( $panels )
 					{
 						var $btns = $panels
-							.find( '.' + _c.prev + ', .' + _c.next )
+							.find( '.' + _c.btn )
 							.each(
 								function()
 								{
@@ -126,7 +119,7 @@
 					function( $panel )
 					{
 						var $navbar = $panel.children( '.' + _c.navbar );
-						this.__sr_aria( $navbar, 'hidden', !$panel.hasClass( _c.hasnavbar ) );
+						this.__sr_aria( $navbar, 'hidden', !$panel.hasClass( _c.panel + '_has-navbar' ) );
 					}
 				);
 
@@ -135,19 +128,19 @@
 				if ( opts.text )
 				{
 					//	Add aria-hidden to item text if the full-width next button has screen reader text
-					this.bind( 'initlistview:after',
-						function( $panel )
-						{
+					// this.bind( 'initlistview:after',
+					// 	function( $panel )
+					// 	{
 						
-							var $span = $panel
-								.find( '.' + _c.listview )
-								.find( '.' + _c.fullsubopen )
-								.parent()
-								.children( 'span' );
+					// 		var $span = $panel
+					// 			.find( '.' + _c.listview )
+					// 			.find( '.' + _c.btn + '_fullwidth' )
+					// 			.parent()
+					// 			.children( 'span' );
 
-							this.__sr_aria( $span, 'hidden', true );
-						}
-					);
+					// 		this.__sr_aria( $span, 'hidden', true );
+					// 	}
+					// );
 
 
 					//	Add aria-hidden to titles in navbars
@@ -157,7 +150,7 @@
 							function( $panel )
 							{
 								var $navbar = $panel.children( '.' + _c.navbar ),
-									hidden  = ( $navbar.children( '.' + _c.prev ).length ) ? true : false;
+									hidden  = ( $navbar.children( '.' + _c.btn + '_prev' ).length ) ? true : false;
 
 								this.__sr_aria( $navbar.children( '.' + _c.title ), 'hidden', hidden );
 							}
@@ -176,7 +169,8 @@
 				this.bind( 'initAddons:after',
 					function()
 					{
-						this.bind( 'setPage:after' 	, function() { this.trigger( 'setPage:after:sr-text' 	, arguments[ 0 ]	) });
+						this.bind( 'setPage:after' 		, function() { this.trigger( 'setPage:after:sr-text' 	, arguments[ 0 ]	) });
+						this.bind( 'initBlocker:after'	, function() { this.trigger( 'initBlocker:after:sr-text' 					) });
 					}
 				);
 
@@ -186,16 +180,9 @@
 					function( $panel )
 					{
 						var $navbar = $panel.children( '.' + _c.navbar ),
-							_text 	= $navbar.children( '.' + _c.title ).text();
+							_text = this.i18n( conf.text.closeSubmenu );
 
-						var txt = $[ _PLUGIN_ ].i18n( conf.text.closeSubmenu );
-
-						if ( _text )
-						{
-							txt += ' (' + _text + ')';
-						}
-
-						$navbar.children( '.' + _c.prev ).html( this.__sr_text( txt ) );
+						$navbar.children( '.' + _c.btn + '_prev' ).html( this.__sr_text( _text ) );
 					}
 				);
 
@@ -207,17 +194,10 @@
 						var $parent = $panel.data( _d.parent );
 						if ( $parent && $parent.length )
 						{
-							var $next = $parent.children( '.' + _c.next ),
-								_text = $next.nextAll( 'span, a' ).first().text();
+							var $next = $parent.children( '.' + _c.btn + '_next' ),
+								_text = this.i18n( conf.text[ $next.parent().is( '.' + _c.listitem + '_vertical' ) ? 'toggleSubmenu' : 'openSubmenu' ] );
 
-							var txt = $[ _PLUGIN_ ].i18n( conf.text[ $next.parent().is( '.' + _c.vertical ) ? 'toggleSubmenu' : 'openSubmenu' ] );
-
-							if ( _text )
-							{
-								txt += ' (' + _text + ')';
-							}
-
-							$next.html( that.__sr_text( txt ) );
+							$next.append( that.__sr_text( _text ) );
 						}			
 					}
 				);
@@ -260,6 +240,12 @@
 		$elem
 			.prop( 'aria-' + attr, value )
 			[ value ? 'attr' : 'removeAttr' ]( 'aria-' + attr, value );
+	};
+	$[ _PLUGIN_ ].prototype.__sr_role = function( $elem, value )
+	{
+		$elem
+			.prop( 'role', value )
+			[ value ? 'attr' : 'removeAttr' ]( 'role', value );
 	};
 	$[ _PLUGIN_ ].prototype.__sr_text = function( text )
 	{

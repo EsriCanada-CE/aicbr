@@ -1,4 +1,4 @@
-import L from 'leaflet';
+import { Util, geoJson, latLngBounds } from 'leaflet';
 import { FeatureLayerService } from 'esri-leaflet';
 
 export var FeatureLayerProvider = FeatureLayerService.extend({
@@ -42,6 +42,7 @@ export var FeatureLayerProvider = FeatureLayerService.extend({
           var feature = results.features[i];
           suggestions.push({
             text: this.options.formatSuggestion.call(this, feature),
+            unformattedText: feature.properties[this.options.searchFields[0]],
             magicKey: feature.id
           });
         }
@@ -66,7 +67,7 @@ export var FeatureLayerProvider = FeatureLayerService.extend({
       query.within(bounds);
     }
 
-    return query.run(L.Util.bind(function (error, features) {
+    return query.run(Util.bind(function (error, features) {
       var results = [];
       for (var i = 0; i < features.features.length; i++) {
         var feature = features.features[i];
@@ -112,12 +113,12 @@ export var FeatureLayerProvider = FeatureLayerService.extend({
   },
 
   _featureBounds: function (feature) {
-    var geojson = L.geoJson(feature);
+    var geojson = geoJson(feature);
     if (feature.geometry.type === 'Point') {
       var center = geojson.getBounds().getCenter();
       var lngRadius = ((this.options.bufferRadius / 40075017) * 360) / Math.cos((180 / Math.PI) * center.lat);
       var latRadius = (this.options.bufferRadius / 40075017) * 360;
-      return L.latLngBounds([center.lat - latRadius, center.lng - lngRadius], [center.lat + latRadius, center.lng + lngRadius]);
+      return latLngBounds([center.lat - latRadius, center.lng - lngRadius], [center.lat + latRadius, center.lng + lngRadius]);
     } else {
       return geojson.getBounds();
     }

@@ -60,28 +60,28 @@ html, body {
 
 .mm-listview>li>a, .mm-listview>li>span { color: inherit !important; }
 
-.mm-navbars-bottom .fa {
+.mm-navbars_bottom .fa {
   opacity: 0.6;
   transition: 0.4s;
 }
 
-.mm-navbars-bottom .fa:hover {
+.mm-navbars_bottom .fa:hover {
   opacity: 1;
 }
 
-.mm-navbars-bottom .fa-twitter {
+.mm-navbars_bottom .fa-twitter {
     color: #1cc1f7 !important;
 }
 
-.mm-navbars-bottom .fa-facebook {
+.mm-navbars_bottom .fa-facebook {
     color: #43609c !important;
 }
 
-.mm-navbars-bottom .fa-linkedin-square {
+.mm-navbars_bottom .fa-linkedin {
   color: #0077B5 !important;
 }
 
-.mm-navbars-bottom .fa-youtube-play {
+.mm-navbars_bottom .fa-youtube {
   color: #cc181e !important;
 }
 
@@ -151,9 +151,53 @@ html, body {
     content: "\e010";
 }
 
-.pt-filters.mm-listview>li>span, .tg-filters.mm-listview>li>span, .com-filters.mm-listview>li>span {
-  padding-right: 50px;
+.pt-filters.mm-listview>li>span, .tg-filters.mm-listview>li>span, .com-filters.mm-listview>li>span, .custom-filter.mm-listview>li>span {
+  padding-right: 58px;
 }
+
+/* Start: Adding rules from older jQuery.mmenu sytles for compatibility */
+.territories.mm-listview>li>a.mm-listitem__text, .pt-filters.mm-listview>li>a.mm-listitem__text, .tg-filters.mm-listview>li>a.mm-listitem__text, .com-filters.mm-listview>li>a.mm-listitem__text {
+  padding-right: 46px;
+}
+
+.mm-listview>li {
+  position: relative;
+}
+
+.mm-listview>li:not(.mm-divider):after {
+    content: '';
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    display: block;
+    position: absolute;
+    left: 20px;
+    right: 0;
+    bottom: 0;
+    border-color: rgba(0,0,0,.15);
+}
+
+.mm-listview>li>a, .mm-listview>li>span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: inherit;
+    display: block;
+    padding: 10px 10px 10px 20px;
+    margin: 0;
+}
+
+.mm-listitem.custom-filters-placeholder {
+  height: 3px;
+}
+
+label.mm-check, label.mm-toggle {
+  right: 12px;
+  position: absolute;
+  top: 50%;
+  margin-top: -17px;
+}
+/* End: Adding rules from older jQuery.mmenu sytles for compatibility */
+
 
 /* basemap and territory picker stuff */
 .mm-menu label.mm-check:before {
@@ -193,4 +237,20 @@ html, body {
 
 .mm-menu ul > li > .reset.enabled:hover {
   opacity:1;
+}
+
+#spinner {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: auto;
+  margin-top: -25px;
+  margin-left: -25px;
+  font-size: 50px;
+  line-height: 50px;
+  z-index: 1001;
+  pointer-events: none;
+  opacity: 0.3;
 }

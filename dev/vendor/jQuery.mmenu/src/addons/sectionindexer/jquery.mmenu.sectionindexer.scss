@@ -1,53 +1,67 @@
-/*
-	jQuery.mmenu sectionIndexer addon CSS
-*/
+@import
+	'../../mixins',
+	'../../variables';
 
-@import "../../scss/import";
 
-.mm-indexer
+@if ( $mm_opt_sectionindexer )
 {
-	background: inherit;
-	text-align: center;
-	font-size: 12px;
-
-	box-sizing: border-box;
-	width: $mm_sectionIndexerWidth;
-
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: -( $mm_sectionIndexerWidth * 5 );
-	z-index: 15;
-	
-	transition: right $mm_transitionDuration $mm_transitionFunction;
-	
-	//	Bugfix
-	//	transform: translate3d( 0, 0, 0 );
-	@include mm_translate( 0, 0 );
-
-	a
+	.mm-sectionindexer
 	{
-		text-decoration: none;
-		display: block;
-		height: 3.85%;
+		background: inherit;
+		text-align: center;
+		font-size: 12px;
+
+		box-sizing: border-box;
+		width: $mm_sectionIndexerSize;
+
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: -$mm_sectionIndexerSize;
+		z-index: 15;
+		
+		transition: right $mm_transitionDuration $mm_transitionFunction;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: space-evenly;
+
+		a
+		{
+			color: $mm_dimmedTextColor;	//	IE11 fallback
+			color: var( --mm-color-text-dimmed );
+			line-height: 1;
+			text-decoration: none;
+			display: block;
+		}
+
+		~ .mm-panels
+		{
+			transition: right $mm_transitionDuration $mm_transitionFunction;
+		}
+	}
+	.mm-menu_has-sectionindexer
+	{
+		.mm-sectionindexer
+		{
+			right: 0;
+		}
+		.mm-panels
+		{
+			right: $mm_sectionIndexerSize;
+		}
 	}
 
-	~ .mm-panel.mm-hasindexer
+	@if ( $mm_opt_navbars )
 	{
-		padding-right: $mm_panelPadding + $mm_sectionIndexerWidth;
+		@include mm_sectionindexer_position( 'top', 1 );
+		@include mm_sectionindexer_position( 'top', 2 );
+		@include mm_sectionindexer_position( 'top', 3 );
+		@include mm_sectionindexer_position( 'top', 4 );
+
+		@include mm_sectionindexer_position( 'bottom', 1 );
+		@include mm_sectionindexer_position( 'bottom', 2 );
+		@include mm_sectionindexer_position( 'bottom', 3 );
+		@include mm_sectionindexer_position( 'bottom', 4 );
 	}
 }
-.mm-hasindexer
-{
-	.mm-indexer
-	{
-		right: 0;
-	}
-	.mm-fixeddivider
-	{
-		right: $mm_sectionIndexerWidth;
-	}
-}
-
-
-@include mm_colors_sectionindexer;

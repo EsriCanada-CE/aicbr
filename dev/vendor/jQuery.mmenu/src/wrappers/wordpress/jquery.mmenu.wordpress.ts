@@ -1,17 +1,16 @@
-/*	
- * WordPress wrapper for jQuery mmenu
- * Include this file after including the jquery.mmenu plugin for default WordPress support.
- */
-
-
 (function( $ ) {
 
-	var _PLUGIN_ = 'mmenu';
+	const _PLUGIN_ = 'mmenu';
+	const _WRAPPR_ = 'wordpress';
 
-	$[ _PLUGIN_ ].configuration.classNames.selected = 'current-menu-item';
 
-	$("#wpadminbar")
-		.css( 'position', 'fixed' )
-		.addClass( 'mm-slideout' );
+	$[ _PLUGIN_ ].wrappers[ _WRAPPR_ ] = function()
+	{
+		this.conf.classNames.selected = 'current-menu-item';
+
+		$("#wpadminbar")
+			.css( 'position', 'fixed' )
+			.addClass( 'mm-slideout' );
+	};
 
 })( jQuery );

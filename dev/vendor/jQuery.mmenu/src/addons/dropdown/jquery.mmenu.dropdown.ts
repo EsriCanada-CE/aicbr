@@ -1,14 +1,7 @@
-/*	
- * jQuery mmenu dropdown add-on
- * mmenu.frebsite.nl
- *
- * Copyright (c) Fred Heusschen
- */
-
 (function( $ ) {
 
-	var _PLUGIN_ = 'mmenu',
-		_ADDON_  = 'dropdown';
+	const _PLUGIN_ = 'mmenu';
+	const _ADDON_  = 'dropdown';
 
 
 	$[ _PLUGIN_ ].addons[ _ADDON_ ] = {
@@ -58,12 +51,12 @@
 			this.bind( 'initMenu:after',
 				function()
 				{
-					this.$menu.addClass( _c.dropdown );
+					this.$menu.addClass( _c.menu + '_' + _ADDON_ );
 
-					if ( opts.tip )
-					{
-						this.$menu.addClass( _c.tip );
-					}
+					// if ( opts.tip )
+					// {
+					// 	this.$menu.addClass( _c.tip );
+					// }
 
 					if ( typeof opts.position.of != 'string' )
 					{
@@ -117,7 +110,7 @@
 				function()
 				{
 					this.$menu.data( _d.style, this.$menu.attr( 'style' ) || '' );
-					glbl.$html.addClass( _c.dropdown );
+					glbl.$html.addClass( _c.wrapper + '_dropdown' );
 				}
 			);
 
@@ -125,7 +118,7 @@
 				function()
 				{
 					this.$menu.attr( 'style', this.$menu.data( _d.style ) );
-					glbl.$html.removeClass( _c.dropdown );
+					glbl.$html.removeClass( _c.wrapper + '_dropdown' );
 				}
 			);
 
@@ -184,7 +177,10 @@
 					css[ _str ] = val + conf.offset.button[ dir ];
 					css[ _stp ] = 'auto';
 
-					cls.push( _c[ ( dir == 'x' ) ? 'tipleft' : 'tiptop' ] );
+					if ( opts.tip )
+					{
+						cls.push( _c.menu + '_tip-' + ( dir == 'x' ? 'left' : 'top' ) );
+					}
 				}
 				else
 				{
@@ -194,10 +190,16 @@
 					css[ _stp ] = 'calc( 100% - ' + ( val - conf.offset.button[ dir ] ) + 'px )';
 					css[ _str ] = 'auto';
 
-					cls.push( _c[ ( dir == 'x' ) ? 'tipright' : 'tipbottom' ] );
+					if ( opts.tip )
+					{
+						cls.push( _c.menu + '_tip-' + ( dir == 'x' ? 'right' : 'bottom' ) );
+					}
 				}
 
-				css[ _max ] = Math.min( conf[ _siz ].max, max );
+				if ( opts.fitViewport )
+				{
+					css[ _max ] = Math.min( conf[ _siz ].max, max );
+				}
 
 				return [ css, cls ];
 			};
@@ -258,7 +260,7 @@
 			_d = $[ _PLUGIN_ ]._d;
 			_e = $[ _PLUGIN_ ]._e;
 
- 			_c.add( 'dropdown tip tipleft tipright tiptop tipbottom' );
+ 			_c.add( 'dropdown' );
  			_e.add( 'mouseenter mouseleave resize scroll' );
 		},
 
@@ -270,6 +272,7 @@
 	//	Default options and configuration
 	$[ _PLUGIN_ ].defaults[ _ADDON_ ] = {
 		drop 		: false,
+		fitViewport	: true,
 		event		: 'click',
 		position	: {},
 		tip			: true
@@ -277,8 +280,8 @@
 	$[ _PLUGIN_ ].configuration[ _ADDON_ ] = {
 		offset: {
 			button	: {
-				x 		: -10,
-				y		: 10
+				x 		: -5,
+				y		: 5
 			},
 			viewport: {
 				x 		: 20,

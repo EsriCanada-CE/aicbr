@@ -1,133 +1,65 @@
-/*
-jQuery.mmenu listview extension CSS
-*/
-
-@import "../../scss/import";
+@import
+	'../../mixins',
+	'../../variables';
 
 
 //	Justified listviews
-.mm-menu.mm-listview-justify .mm-panels > .mm-panel,
-.mm-menu .mm-panels > .mm-panel.mm-listview-justify
+@if ( $mm_opt_listview_justify )
 {
-	&:before,
-	&:after
+	.mm-menu_listview-justify .mm-panels > .mm-panel,
+	.mm-panels > .mm-panel_listview-justify
 	{
-		content: none;
-		display: none;
-	}
+		&:before,
+		&:after
+		{
+			content: none;
+			display: none;
+		}
 
-	> .mm-listview
-	{
-		display: flex;
-		flex-direction: column;
+		.mm-listview
+		{
+			display: flex;
+			flex-direction: column;
 
-		height: 100%;
-		margin-top: 0;
-		margin-bottom: 0;
-
-		> li
+			height: 100%;
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+		.mm-listitem
 		{
 			flex: 1 0 auto;
 			min-height: $mm_btnSize; /* for Safari :( */
 
-			&:not( .mm-divider )
+			&:not( .mm-listitem_divider )
 			{
 				display: flex;
 				flex-direction: column;
 			}
-
-			> a:not( .mm-next ),
-			> span
-			{
-				box-sizing: border-box;
-				flex: 1 0 auto;
-				display: flex;
-				align-items: center;
-			}
 		}
-	}
-}
-
-
-@mixin mm_listviewSize( $size )
-{
-	.mm-listview > li
-	{
-		> a:not( .mm-next ),
-		> span
+		.mm-listitem__text
 		{
-			padding: $size $mm_listitemPadding $size $mm_listitemIndent;
-		}
-	}
-	.mm-vertical > .mm-listview > li,
-	.mm-listview > li.mm-vertical
-	{
-		> .mm-next
-		{
-			height: $mm_btnSize - ( $mm_listitemPadding * 2 ) + ( $size * 2 );
+			box-sizing: border-box;
+			flex: 1 0 auto;
+			display: flex;
+			align-items: center;
 		}
 	}
 }
 
-//	Small listviews
-.mm-listview-small
+//	Inset lists
+@if ( $mm_opt_listview_inset )
 {
-	@include mm_listviewSize( $mm_listitemSmallPadding );
-}
-
-//	Large listviews
-.mm-listview-large
-{
-	@include mm_listviewSize( $mm_listitemLargePadding );
-}
-
-//	Huge listviews
-.mm-listview-huge
-{
-	@include mm_listviewSize( $mm_listitemHugePadding );
-}
-
-
-.mm-listview
-{
-
-	//	Dividers
-	.mm-divider
-	{
-		@include mm_ellipsis;
-
-		font-size: $mm_dividerFontSize;
-		text-transform: uppercase;
-		text-indent: $mm_listitemIndent;
-		line-height: $mm_dividerHeight;
-	}
-
-	//	Spacers
-	.mm-spacer
-	{
-		padding-top: $mm_btnSize;
-		
-		> .mm-next
-		{
-			top: $mm_btnSize;
-		}
-
-		&.mm-divider
-		{
-			padding-top: $mm_dividerHeight;
-		}
-	}
-
-	//	Inset lists
-	.mm-inset
+	.mm-listview_inset
 	{
 		list-style: inside disc;
-		padding: 0 $mm_listitemPadding ( $mm_listitemPadding * 1.5 ) ( $mm_listitemIndent * 2 );
+		width: 100%;
+		padding: 0 ( $mm_padding + $mm_listitemIndent ) ( $mm_padding * 1.5 ) ( $mm_padding + $mm_listitemIndent );
 		margin: 0;
 
-		> li
+		.mm-listitem
 		{
-			padding: ( $mm_listitemPadding / 2 ) 0;
+			padding: ( $mm_padding * .5 ) 0;
 		}
 	}
 }
+

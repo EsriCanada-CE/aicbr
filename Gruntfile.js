@@ -3,7 +3,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON("package.json"),
         clean: {
             build: [
-                "dist/js/aicbr.js",
+                "dist/js/",
                 "dist/css/",
                 "dist/vendor/",
                 "dist/calcite-maps/",
@@ -14,7 +14,6 @@ module.exports = function(grunt) {
         postcss: {
           options: {
               map: {inline: false},
-
               processors: [
                   require('postcss-partial-import')({}),
                   require('autoprefixer')({browsers: ["> 1%", "last 3 versions", "Firefox ESR", "Opera 12.1", "ie 9"]}), // add vendor prefixes
@@ -37,16 +36,24 @@ module.exports = function(grunt) {
                 collapseWhitespace: true
             },
             build: {
-                files: {
-                    "dist/index.html": "dev/index.html"
-                }
+                files: [{
+                    expand: true,
+                    cwd: 'dev/',
+                    src: 'apps/**/*.html',
+                    dest: 'dist/'
+                }]
             }
         },
         copy: {
             build: {
                 files: [{
-                    src: 'dev/js/config.js',
-                    dest: 'dist/js/config-default.js'
+                    expand: true,
+                    cwd: 'dev/',
+                    src: 'apps/**/*.js',
+                    rename: function(dest, src) {
+                      return dest + src.replace('.js', '-dist.js');
+                    },
+                    dest: 'dist/'
                 },{
                     expand: true,
                     cwd: 'dev/',
@@ -87,7 +94,7 @@ module.exports = function(grunt) {
     // Require the needed plugins
     grunt.loadNpmTasks("grunt-contrib-htmlmin");
     grunt.loadNpmTasks("grunt-contrib-requirejs");
-    grunt.loadNpmTasks("grunt-contrib-copy");;
+    grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-postcss");
     //grunt.loadNpmTasks("grunt-regex-replace");

@@ -15,15 +15,14 @@ require.config({
         //"meld": "../components/meld/meld",
         "mmenu": "../vendor/jQuery.mmenu/dist/jquery.mmenu.all",
         "bootstrap": "../vendor/bootstrap/dist/js/bootstrap.min",
-        "calcite": "../vendor/calcite-maps/js/jquery/calcitemaps-v0.3",
+        "calcite": "../vendor/calcite-maps/dist/js/jquery/calcitemaps-v0.9",
         //"platform": "../components/platform/platform",
 
         // App modules
         "controllers": "controllers",
         "modules": "modules",
         "services": "services",
-        "views": "views",
-        "config": "config"
+        "views": "views"
     },
     shim: {
         "jquery": {

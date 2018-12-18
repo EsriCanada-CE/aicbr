@@ -1,14 +1,7 @@
-/*	
- * jQuery mmenu pageScroll add-on
- * mmenu.frebsite.nl
- *
- * Copyright (c) Fred Heusschen
- */
-
 (function( $ ) {
 
-	var _PLUGIN_ = 'mmenu',
-		_ADDON_  = 'pageScroll';
+	const _PLUGIN_ = 'mmenu';
+	const _ADDON_  = 'pageScroll';
 
 
 	$[ _PLUGIN_ ].addons[ _ADDON_ ] = {
@@ -90,7 +83,7 @@
 										_selected = s;
 										that.setSelected( 
 											that.__filterListItemAnchors( 
-												that.$pnls.children( '.' + _c.opened ).find( '.' + _c.listview ).children( 'li' )
+												that.$pnls.children( '.' + _c.panel + '_opened' ).find( '.' + _c.listview ).children( 'li' )
 											)
 											.filter( '[href="' + scts[ s ] + '"]' )
 											.parent()
@@ -113,13 +106,14 @@
 		},
 
 		//	clickAnchor: prevents default behavior when clicking an anchor
-		clickAnchor: function( $a, inMenu )
+		clickAnchor: function( $a, inMenu, inListview )
 		{
 			$section = false;
 
 			if ( !inMenu ||
-				!this.opts[ _ADDON_ ].scroll ||
+				!inListview ||
 				!this.opts.offCanvas ||
+				!this.opts[ _ADDON_ ].scroll ||
 				!glbl.$page ||
 				!glbl.$page.length
 			) {
@@ -131,9 +125,16 @@
 			if ( anchorInPage( href ) )
 			{
 				$section = $(href);
-				if ( glbl.$html.hasClass( _c.mm( 'widescreen' ) ) )
-				{
+				if ( this.$menu.is( '.' + _c.menu + '_sidebar-expanded' ) && 
+					glbl.$html.is( '.' + _c.wrapper + '_sidebar-expanded' )
+				) {
 					scrollTo( this.conf[ _ADDON_ ].scrollOffset );
+				}
+				else
+				{
+					return {
+						close: true
+					};
 				}
 			}
 		}

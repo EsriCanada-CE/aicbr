@@ -14,15 +14,14 @@
     "debug"
   ],
   "homepage": "https://github.com/Esri/esri-leaflet-geocoder",
-  "version": "2.2.4",
-  "_release": "2.2.4",
+  "version": "2.2.13",
+  "_release": "2.2.13",
   "_resolution": {
     "type": "version",
-    "tag": "v2.2.4",
-    "commit": "87dfd4f2da772a49dd20c4f910ff281c9d3aad91"
+    "tag": "v2.2.13",
+    "commit": "39de5aa4fa64146fe4cc90b6d3dbabb359325a7c"
   },
   "_source": "https://github.com/Esri/esri-leaflet-geocoder.git",
-  "_target": "^2.2.4",
-  "_originalSource": "esri-leaflet-geocoder",
-  "_direct": true
+  "_target": "^2.2.13",
+  "_originalSource": "esri-leaflet-geocoder"
 }

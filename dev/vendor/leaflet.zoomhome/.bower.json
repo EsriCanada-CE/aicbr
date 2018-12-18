@@ -35,6 +35,5 @@
   },
   "_source": "https://github.com/torfuspolymorphus/leaflet.zoomhome.git",
   "_target": "^0.2.0",
-  "_originalSource": "leaflet.zoomhome",
-  "_direct": true
+  "_originalSource": "leaflet.zoomhome"
 }

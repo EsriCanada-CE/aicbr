@@ -1,7 +1,11 @@
 define([
-  "config", "jquery", "leaflet"
+  document.location.href.replace(/[^\/]*$/, '') + "config.js",
+  "jquery",
+  "leaflet"
 ], function (
-  config, $, L
+  config,
+  $,
+  L
 ) {
   var filterTemplate =
 '<li><span class="label"></span>\
@@ -21,7 +25,7 @@ define([
     });
   }
 
-  function loadFilters(dataLayerInfo, programMarkers, programsLayer, map)
+  function loadFilters(dataLayerInfo, programMarkers, programsLayer, map, terr)
   {
     _programMarkers = programMarkers;
     _programsLayer = programsLayer;
@@ -33,8 +37,10 @@ define([
     targetGroups = [];
     communityFilters = [];
     communities = [];
+    configuredFilters = {};
     _lowercaseCommunities = [];
 
+    // Get the program types from the config - this will be a series of yes/no fields:
     $.each(dataLayerInfo.fields, function(i,field){
       if (!!config.program_types.yes_no_fields[field.name])
       {
@@ -47,7 +53,28 @@ define([
       }
     });
 
+    // Load properties for any additional configured filters...
+    $.each(config.filters, function(id, opts){
+      var filter = configuredFilters[id] = opts;
+      filter.values = [];
+      filter.loaded_values = {};
+    });
+
     $.each(programMarkers, function(i, marker){
+      // For each of the configured filters, check for new values that should be added:
+      $.each(configuredFilters, function(filter_id, filter){
+        var value = marker.options.feature.properties[filter.field];
+
+        if (!value || value.toString().trim()==="") return;  // Ignore undefined/empty strings.
+
+        var lc_value = value.toString().toLowerCase();
+
+        if (filter.loaded_values[lc_value]) return;  // Ignore values that have already been added.
+
+        filter.values.push(value.toString());
+        filter.loaded_values[lc_value] = true;
+      });
+
       var community = marker.options.feature.properties[config.communities.name_field];
       if (!community || community.toLowerCase() == "na") return;
       if (_lowercaseCommunities.indexOf(community.toLowerCase()) != -1) return;
@@ -88,6 +115,22 @@ define([
       $('input', li).data('community', community);
       $('.label', li).html(community);
       comFilters.append(li);
+    });
+
+    // Acquire values for any additional configured filters
+    $.each(configuredFilters, function(filter_id, filter){
+      var filterList = $('ul.filter-'+filter_id);
+      var customFilter = $('ul.filter-'+filter_id);
+      $('li', customFilter).remove();
+      customFilter.append('<li><a class="label reset">Reset</a></li>');
+
+      $.each(filter.values, function(i,value) {
+        var li = $(filterTemplate);
+        $('input', li).data('filter_'+filter_id, value);
+        $('.label', li).html(value);
+        customFilter.append(li);
+      });
+
     });
   }
 
@@ -160,6 +203,26 @@ define([
     if (comSelected.length > 0) $('ul.com-filters .reset').addClass('enabled');
     else $('ul.com-filters .reset').removeClass('enabled');
 
+    $.each(configuredFilters, function(filter_id, filter){
+      var filterItems = $('ul.filter-'+filter_id+' input');
+      var itemsSelected = filterItems.filter(':checked');
+      var valuesSelected = {};
+
+      if (itemsSelected.length > 0 && itemsSelected.length < filterItems.length)
+      {
+        itemsSelected.each(function(){
+          valuesSelected[$(this).data()['filter_'+filter_id].toLowerCase()] = true;
+        });
+        filteredMarkers = $.grep(filteredMarkers, function(marker){
+          var prop = marker.options.feature.properties[filter.field];
+          if (prop && valuesSelected[prop.toString().toLowerCase()]) return true;
+        });
+      }
+
+      if (itemsSelected.length > 0) $('ul.filter-'+filter_id+' .reset').addClass('enabled');
+      else $('ul.filter-'+filter_id+' .reset').removeClass('enabled');
+    });
+
     _programsLayer.clearLayers();
     _programsLayer.addLayers(filteredMarkers);
     if (e && $(e.target).closest('ul').hasClass('com-filters'))
@@ -176,5 +239,7 @@ define([
     filterMarkers();
   });
 
-  return {loadFilters: loadFilters};
+  return {loadFilters: loadFilters, getFilteredMarkers: function(){
+    return _programsLayer.getLayers();
+  }};
 });

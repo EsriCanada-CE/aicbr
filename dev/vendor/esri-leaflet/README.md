@@ -2,7 +2,8 @@
 
 [![npm version][npm-img]][npm-url]
 [![build status][travis-img]][travis-url]
-[![apache licensed](https://img.shields.io/badge/license-Apache-green.svg?style=flat-square)](https://raw.githubusercontent.com/Esri/esri-leaflet/master/LICENSE)
+[![apache licensed](https://img.shields.io/badge/license-Apache%202.0-orange.svg?style=flat-square)](https://raw.githubusercontent.com/Esri/esri-leaflet/master/LICENSE)
+[![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/esri-leaflet/badge)](https://www.jsdelivr.com/package/npm/esri-leaflet)
 
 [npm-img]: https://img.shields.io/npm/v/esri-leaflet.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/esri-leaflet
@@ -11,7 +12,7 @@
 
 [Leaflet](http://leafletjs.com/) plugins for working with a handful of the most popular [ArcGIS Service](http://developers.arcgis.com) types. This includes Esri [basemaps](http://esri.github.io/esri-leaflet/examples/switching-basemaps.html) and [feature services](http://esri.github.io/esri-leaflet/examples/simple-feature-layer.html), as well as [tiled](http://esri.github.io/esri-leaflet/examples/tile-layer-2.html) map, [dynamic](http://esri.github.io/esri-leaflet/examples/simple-dynamic-map-layer.html) map and [image](http://esri.github.io/esri-leaflet/examples/simple-image-map-layer.html)  services.
 
-> Esri Leaflet is maintained with :heart: by folks spanning multiple teams within Esri, but we provide no guarantee of individual features, nor a traditional product lifecycle to support planning.
+> This project is maintained with :heart: by folks spanning multiple teams within Esri, but we provide no guarantee of individual features, nor a traditional product lifecycle to support planning.
 
 The goal of this project is **not** to replace the [ArcGIS API for JavaScript](https://developers.arcgis.com/en/javascript/) but rather to provide small components for *only some* aspects of the ArcGIS platform for developers who prefer to build mapping applications with [Leaflet](http://leafletjs.com/).
 
@@ -53,12 +54,12 @@ The easiest way to get started is to load Esri Leaflet via [CDN](https://unpkg.c
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Load Leaflet from CDN-->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
+    <!-- Load Leaflet from CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    <!-- Load Esri Leaflet locally, after cloning this repository -->
-    <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet/dist/esri-leaflet.js"></script>
 
     <style>
       html, body, #map {
@@ -89,15 +90,9 @@ The easiest way to get started is to load Esri Leaflet via [CDN](https://unpkg.c
 </html>
 ```
 
-## API Reference
+## [API Reference](http://esri.github.io/esri-leaflet/api-reference/)
 
-A full API Reference can be found in the Esri Leaflet website.
-
-http://esri.github.io/esri-leaflet/api-reference/
-
-The source code for the documentation site can be found in the repository below.  If you notice a typo or other problem, please [let us know](https://github.com/Esri/esri-leaflet-doc/issues)!
-
-https://github.com/Esri/esri-leaflet-doc
+The source code for our documentation site can be found [here](https://github.com/Esri/esri-leaflet-doc). If you notice a typo or other problem, _please_ [let us know](https://github.com/Esri/esri-leaflet-doc/issues)!
 
 ## Additional Plugins
 
@@ -107,7 +102,7 @@ http://leafletjs.com/plugins.html
 
 You can also pick and choose additional Esri Leaflet plugins.
 
-http://esri.github.io/esri-leaflet/plugins/)
+http://esri.github.io/esri-leaflet/plugins/
 
 ## Frequently Asked Questions
 
@@ -129,6 +124,9 @@ http://esri.github.io/esri-leaflet/plugins/)
 * [What browsers does Esri Leaflet support?](https://github.com//Esri/esri-leaflet/wiki/FAQ#what-browsers-does-esri-leaflet-support)
 * [What versions of ArcGIS Server does Esri Leaflet support?](https://github.com//Esri/esri-leaflet/wiki/FAQ#what-versions-of-arcgis-server-does-esri-leaflet-support)
 * [Upgrading the version of Esri Leaflet used in my app broke everything!](https://github.com//Esri/esri-leaflet/wiki/FAQ#upgrading-the-version-of-esri-leaflet-used-in-my-app-broke-everything)
+* [Does Esri Leaflet support IE 'compatibility mode'?](https://github.com//Esri/esri-leaflet/wiki/FAQ#compatibility-mode)
+* [I'm into TypeScript, but Esri Leaflet seems to be a vanilla JS thing. Can I find typings somewhere?](https://github.com//Esri/esri-leaflet/wiki/FAQ#typescript-typings)
+* [When _exactly_ do I need to use a paid Esri developer account to deploy to production?](https://github.com//Esri/esri-leaflet/wiki/FAQ#deployment-plan)
 
 ## Issues
 
@@ -151,10 +149,10 @@ If you'd like to inspect and modify the source of Esri Leaflet, follow the instr
 
 ### Dependencies
 
-* Esri Leaflet [1.x](https://github.com/Esri/esri-leaflet/releases/tag/v1.0.3) (available on [CDN](https://cdn.jsdelivr.net/leaflet.esri/1.0.4/esri-leaflet.js)) can be used in apps alongside:
+* Esri Leaflet [1.x](https://github.com/Esri/esri-leaflet/releases/tag/v1.0.4) (available on [CDN](https://unpkg.com/esri-leaflet@1.0.4)) can be used in apps alongside:
   *  [Leaflet](http://leafletjs.com) version 0.7.x.
 
-* Esri Leaflet [2.x](https://github.com/Esri/esri-leaflet/releases/tag/v2.0.7) (available on [CDN](https://unpkg.com/esri-leaflet@2.0.7)) can be used in apps alongside:
+* Esri Leaflet [2.x](https://github.com/Esri/esri-leaflet/releases/tag/v2.0.8) (available on [CDN](https://unpkg.com/esri-leaflet@2.0.8)) can be used in apps alongside:
   *  [Leaflet](http://leafletjs.com) version 1.x.
 
 The `master` branch of this repository is *only* compatible with Leaflet 1.x.
@@ -171,12 +169,14 @@ Esri welcomes contributions from anyone and everyone. Please see our [guidelines
 
 ### Terms
 
-If you display an ArcGIS Online service in **any** Leaflet application, we require that you:
+If your app is for public, non-revenue generating, non-government, non-commercial use, the free [Essentials Developer Plan](https://developers.arcgis.com/pricing/) is sufficient. If you're going to generate revenue or are using the app for government or business purposes, you'll have to purchase one of the products below:
 
-1. Sign up for a [free developer account](https://developers.arcgis.com/).
-2. Display Esri attribution and recognize data providers.
+* ArcGIS [Pro](https://www.esri.com/en-us/arcgis/products/arcgis-pro/overview)
+* ArcGIS [Online for Organizations](http://www.esri.com/software/arcgis/arcgisonline)
+* ArcGIS [Enterprise](https://www.esri.com/en-us/arcgis/products/arcgis-enterprise/overview)
+* ArcGIS [Online Deployment Plan](https://developers.arcgis.com/pricing/credits/) 
 
-Using this plugin, it couldn't be easier to follow the terms.  Just select your basemap and the appropriate credits will always be displayed in Leaflet's own [Attribution control](http://leafletjs.com/reference.html#control-attribution) as users pan/zoom automatically.
+If you display an ArcGIS Online service in **any** Leaflet application, we require that you display Esri attribution and recognize data providers. Using this plugin, it couldn't be easier to follow the terms.  Just select your basemap and the appropriate credits will be displayed in Leaflet's own [Attribution control](http://leafletjs.com/reference.html#control-attribution) as users pan/zoom automatically.
 
 ```js
 L.esri.basemapLayer('Topographic').addTo(map);
@@ -188,15 +188,16 @@ If you need more than 1 million [map transactions](http://doc.arcgis.com/en/arcg
 
 * [Esri Attribution Requirements](https://developers.arcgis.com/terms/attribution/)
 * [ArcGIS Online Terms of Use](https://developers.arcgis.com/terms/)
+* [Licensing & Attribution](https://developers.arcgis.com/javascript/latest/guide/licensing/index.html)
 
 ### Credit
 
 * `L.esri.DynamicMapLayer` originally used code from [AGS.Layer.Dynamic.js](https://github.com/sanborn/leaflet-ags/blob/master/src/AGS.Layer.Dynamic.js)
 * `L.esri.TiledMapLayer` adapts some code from [arcgis-level-fixer](https://github.com/gisinc/arcgis-level-fixer)
 
-### Licensing
+### License
 
-Copyright 2016 Esri
+Copyright &copy; 2014-2018 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -211,6 +212,3 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 A copy of the license is available in the repository's [LICENSE](./LICENSE) file.
-
-[](Esri Tags: ArcGIS Web Mapping Leaflet)
-[](Esri Language: JavaScript)
