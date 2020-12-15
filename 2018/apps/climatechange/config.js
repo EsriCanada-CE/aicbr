@@ -1,7 +1,7 @@
 define({
   "territories": {
     "yt": {
-      "layer":  "https://services8.arcgis.com/Ryw8BjFdgxyjmolc/arcgis/rest/services/yt_cilimatechange_inventory_2018_public/FeatureServer/0",
+      "layer":  "https://services7.arcgis.com/t4Xe6vv54aJMJbpj/arcgis/rest/services/yt_cilimatechange_inventory_2018_public/FeatureServer/0",
       "label": "Yukon Climate Change Inventory",
       "name": "Yukon"
     }
